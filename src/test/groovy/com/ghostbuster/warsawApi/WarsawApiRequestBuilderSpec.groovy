@@ -9,7 +9,7 @@ class WarsawApiRequestBuilderSpec extends Specification {
         given:
             def builder = WarsawApiRequestBuilder.forPropertyPurchase()
         expect:
-            builder.built().contains('&apikey=f466c384-f5cc-4787-af44-1468697daf47')
+            builder.build().contains('&apikey=f466c384-f5cc-4787-af44-1468697daf47')
     }
 
     def "Should return url with proper api id"(){
@@ -18,21 +18,21 @@ class WarsawApiRequestBuilderSpec extends Specification {
         def purchaseApiBuilder = WarsawApiRequestBuilder.forPropertyPurchase()
 
         expect:
-        rentApiBuilder.built().contains('id=45ba10ab-6562-49ce-b572-6c9b999464d6')
-        purchaseApiBuilder.built().contains('id=baa1d9c9-4a90-401d-b215-57b1ed09e694')
+        rentApiBuilder.build().contains('id=45ba10ab-6562-49ce-b572-6c9b999464d6')
+        purchaseApiBuilder.build().contains('id=baa1d9c9-4a90-401d-b215-57b1ed09e694')
     }
 
     def "Should return url with limit appended"(){
         given:
         def builder = WarsawApiRequestBuilder.forPropertyPurchase().limitResults(5)
         expect:
-        builder.built().contains('&limit=5')
+        builder.build().contains('&limit=5')
     }
 
     def "Shoould return proper url"(){
         given:
         def builder = WarsawApiRequestBuilder.forPropertyPurchase().limitResults(5)
         expect:
-        builder.built() == 'https://api.um.warszawa.pl/api/action/wfsstore_get/?id=baa1d9c9-4a90-401d-b215-57b1ed09e694&apikey=f466c384-f5cc-4787-af44-1468697daf47&limit=5'
+        builder.build() == 'https://api.um.warszawa.pl/api/action/wfsstore_get/?id=baa1d9c9-4a90-401d-b215-57b1ed09e694&apikey=f466c384-f5cc-4787-af44-1468697daf47&limit=5'
     }
 }

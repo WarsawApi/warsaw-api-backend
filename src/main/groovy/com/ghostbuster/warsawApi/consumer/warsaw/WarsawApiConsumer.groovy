@@ -18,7 +18,7 @@ class WarsawApiConsumer {
         Response response = (Response)restTemplate.getForObject(WarsawApiRequestBuilder
                                                                         .forPropertyRent()
                                                                         .limitResults(5)
-                                                                        .built(),
+                                                                        .build(),
                                                                         Response.class)
         return response.result.featureMemberList.collect{ ContainerEntity sw -> new Property(sw) }
     }

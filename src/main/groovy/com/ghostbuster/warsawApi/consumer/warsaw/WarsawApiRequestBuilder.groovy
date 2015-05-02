@@ -36,7 +36,7 @@ class WarsawApiRequestBuilder {
         url.append("&circle=${from.longitude},${from.latitude},${meters}")
     }
 
-    String built(){
+    String build(){
         return url.toString()
     }
 }

@@ -39,7 +39,7 @@ class PropertyControllerSpec extends Specification {
         ResponseEntity<Property[]> entity = new RestTemplate().getForEntity("http://localhost:8080/search", Property[].class)
         then:
         entity.statusCode == HttpStatus.OK
-        entity.body.length == 5
+        entity.body.length <= 5
     }
 
 
