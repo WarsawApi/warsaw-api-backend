@@ -3,7 +3,7 @@ package contracto
 import com.ghostbuster.warsawApi.controller.PropertyController
 import spock.lang.Specification
 
-public final class ContractoSpec extends Specification {
+final class ContractoSpec extends Specification {
 
     def "ContractoSpec should pass"() {
         given:

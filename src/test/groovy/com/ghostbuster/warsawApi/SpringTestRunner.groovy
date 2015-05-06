@@ -1,13 +1,7 @@
 package com.ghostbuster.warsawApi
 
-import com.ghostbuster.warsawApi.consumer.warsaw.WarsawApiRequestBuilder
-import com.ghostbuster.warsawApi.domain.external.warsaw.Response
-import com.ghostbuster.warsawApi.domain.internal.Property
 import org.springframework.boot.SpringApplication
 import org.springframework.context.ConfigurableApplicationContext
-import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
-import org.springframework.web.client.RestTemplate
 import spock.lang.AutoCleanup
 import spock.lang.Shared
 import spock.lang.Specification
@@ -17,7 +11,7 @@ import java.util.concurrent.Executors
 import java.util.concurrent.Future
 import java.util.concurrent.TimeUnit
 
-class PropertyControllerSpec extends Specification {
+abstract class SpringTestRunner extends Specification {
 
     @Shared
     @AutoCleanup
@@ -27,6 +21,7 @@ class PropertyControllerSpec extends Specification {
                 .newSingleThreadExecutor().submit(
                 new Callable() {
                     @Override
+
                     public ConfigurableApplicationContext call() throws Exception {
                         return (ConfigurableApplicationContext) SpringApplication
                                 .run(Application.class)
@@ -34,13 +29,5 @@ class PropertyControllerSpec extends Specification {
                 })
         context = future.get(120, TimeUnit.SECONDS)
     }
-    void "should return two properties on /search endpoint"() {
-        when:
-        ResponseEntity<Property[]> entity = new RestTemplate().getForEntity("http://localhost:8080/search", Property[].class)
-        then:
-        entity.statusCode == HttpStatus.OK
-        entity.body.length <= 5
-    }
-
 
 }
