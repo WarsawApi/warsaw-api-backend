@@ -43,8 +43,11 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-actuator"
     compile("org.springframework:spring-context")
 
-    compile "org.codehaus.groovy:groovy-all:2.2.0"
+    compile "org.codehaus.groovy:groovy-all:2.4.3"
     testCompile "org.spockframework:spock-core:0.7-groovy-2.0"
+    testCompile files('libs/contracto-jvm-core-1.0.jar')
+    testCompile files('libs/contracto-spring-1.0.jar')
+    testCompile 'com.squareup.retrofit:retrofit:1.9.0'
 }
 
 task wrapper(type: Wrapper) {

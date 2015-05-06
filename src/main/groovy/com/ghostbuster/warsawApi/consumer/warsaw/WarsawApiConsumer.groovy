@@ -30,7 +30,7 @@ class WarsawApiConsumer {
         Response response = (Response) restTemplate.getForObject(WarsawApiRequestBuilder
                 .forPropertyRent()
                 .withFilter(WarsawApiFilterBuilder.forProperty('ID').isLike(id).build())
-                .built(),
+                .build(),
                 Response.class)
         return response.result.featureMemberList.collect { ContainerEntity sw -> new Property(sw) }.first()
     }
