@@ -17,6 +17,11 @@ class PropertyController {
 
     @RequestMapping('/search')
     public List<Property> search(@RequestParam(value="school", required = false) Integer school, @RequestParam(value="metro", required = false) Integer metro){
-        return propertyProvider.getById('1')
+        return propertyProvider.search('1')
+    }
+
+    @RequestMapping('/details')
+    public Property details(@RequestParam(value = "id", required = true) String id) {
+        return propertyProvider.getById(id)
     }
 }

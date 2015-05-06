@@ -34,6 +34,12 @@ class WarsawApiRequestBuilder {
 
     WarsawApiRequestBuilder notFarThen(Coordinate from, Integer meters){
         url.append("&circle=${from.longitude},${from.latitude},${meters}")
+        return this
+    }
+
+    WarsawApiRequestBuilder withFilter(String filter) {
+        url.append("&filter=${filter}")
+        return this
     }
 
     String build(){
