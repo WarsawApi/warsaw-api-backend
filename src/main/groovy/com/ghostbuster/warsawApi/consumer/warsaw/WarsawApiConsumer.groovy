@@ -16,26 +16,28 @@ class WarsawApiConsumer {
     @Cacheable("properties")
     List<Property> search(String id) {
         RestTemplate restTemplate = new RestTemplate()
-        Response response = (Response)restTemplate.getForObject(WarsawApiRequestBuilder
-                                                                        .forPropertyRent()
-                                                                        .limitResults(5)
-                                                                        .build(),
-                                                                        Response.class)
-        return response.result.featureMemberList.collect{ ContainerEntity sw -> new Property(sw) }
+        Response response = (Response) restTemplate.getForObject(WarsawApiRequestBuilder
+                .forPropertyRent()
+                .limitResults(5)
+                .build(),
+                Response.class)
+        return response.result.featureMemberList.collect { ContainerEntity sw -> new Property(sw) }
     }
 
     //odleglosc * waga
 
+    @Cacheable("properties")
     Property getById(String id) {
         RestTemplate restTemplate = new RestTemplate()
         Response response = (Response) restTemplate.getForObject(WarsawApiRequestBuilder
                 .forPropertyRent()
-                .withFilter(Filter.xml {
-            propertyIsLike {
-                propertyName 'ID'
-                literal "${id}"
-            }
-        })
+                .withFilter(
+                    Filter.xml {
+                        propertyIsLike {
+                            propertyName 'ID'
+                            literal id
+                        }
+                    })
                 .build(),
                 Response.class)
         return response.result.featureMemberList.collect { ContainerEntity sw -> new Property(sw) }.first()
