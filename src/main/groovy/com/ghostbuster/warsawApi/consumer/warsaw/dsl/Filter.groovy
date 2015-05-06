@@ -7,16 +7,16 @@ class Filter {
 
     PropertyIsLike propertyIsLike
 
-    static String xml(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = Filter) closure) {
-        Filter memoDsl = new Filter()
-        closure.delegate = memoDsl
+    static String xml(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = Filter) Closure closure) {
+        Filter filter = new Filter()
+        closure.delegate = filter
         closure()
-        return doXml(memoDsl)
+        return doXml(filter)
     }
 
-    void propertyIsLike(@DelegatesTo(PropertyIsLike) Closure body) {
+    void propertyIsLike(@DelegatesTo(PropertyIsLike) Closure closure) {
         propertyIsLike = new PropertyIsLike()
-        def code = body.rehydrate(propertyIsLike, this, this)
+        def code = closure.rehydrate(propertyIsLike, this, this)
         code.resolveStrategy = Closure.DELEGATE_ONLY
         code()
     }
