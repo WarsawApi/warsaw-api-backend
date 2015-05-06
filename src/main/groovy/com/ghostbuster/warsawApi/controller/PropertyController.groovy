@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @CompileStatic
 @RestController
+@RequestMapping(produces = "application/json")
 class PropertyController {
 
     @Autowired

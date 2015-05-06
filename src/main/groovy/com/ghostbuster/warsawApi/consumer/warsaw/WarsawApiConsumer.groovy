@@ -1,5 +1,6 @@
 package com.ghostbuster.warsawApi.consumer.warsaw
 
+import com.ghostbuster.warsawApi.consumer.warsaw.dsl.Filter
 import com.ghostbuster.warsawApi.domain.external.warsaw.ContainerEntity
 import com.ghostbuster.warsawApi.domain.external.warsaw.Response
 import com.ghostbuster.warsawApi.domain.internal.Property
@@ -29,7 +30,12 @@ class WarsawApiConsumer {
         RestTemplate restTemplate = new RestTemplate()
         Response response = (Response) restTemplate.getForObject(WarsawApiRequestBuilder
                 .forPropertyRent()
-                .withFilter(WarsawApiFilterBuilder.forProperty('ID').isLike(id).build())
+                .withFilter(Filter.xml {
+            propertyIsLike {
+                propertyName 'ID'
+                literal "${id}"
+            }
+        })
                 .build(),
                 Response.class)
         return response.result.featureMemberList.collect { ContainerEntity sw -> new Property(sw) }.first()
