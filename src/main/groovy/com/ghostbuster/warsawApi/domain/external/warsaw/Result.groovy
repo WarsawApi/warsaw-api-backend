@@ -6,5 +6,5 @@ import groovy.transform.CompileStatic
 @CompileStatic
 @JsonIgnoreProperties(ignoreUnknown = true)
 class Result {
-    List<ContainerEntity> featureMemberList
+    List<WarsawData> featureMemberList
 }

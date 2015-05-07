@@ -1,7 +1,7 @@
 package com.ghostbuster.warsawApi.domain.internal
 
-import com.ghostbuster.warsawApi.domain.external.warsaw.ContainerEntity
 import com.ghostbuster.warsawApi.domain.external.warsaw.KeyValue
+import com.ghostbuster.warsawApi.domain.external.warsaw.WarsawData
 import groovy.transform.Canonical
 import groovy.transform.CompileStatic
 import groovy.transform.EqualsAndHashCode
@@ -21,7 +21,7 @@ class Property {
 
     public Property(){}
 
-    public Property(ContainerEntity entity){
+    public Property(WarsawData entity){
         latitude = entity?.geometry?.coordinates?.first().latitude
         longitude = entity?.geometry?.coordinates?.first().longitude
         id = entity.properties.find {KeyValue kv -> kv.key == 'ID' }?.value

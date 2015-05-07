@@ -11,7 +11,7 @@ final class FilterSpec extends Specification {
         String filter = '<Filter><PropertyIsLike><PropertyName>ID</PropertyName><Literal>389</Literal></PropertyIsLike></Filter>'
 
         when:
-        String dslFilter = Filter.xml {
+        String dslFilter = Filter.makeAsXML {
             propertyIsLike {
                 propertyName "ID"
                 literal "389"

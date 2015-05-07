@@ -7,7 +7,7 @@ class Filter {
 
     PropertyIsLike propertyIsLike
 
-    static String xml(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = Filter) Closure closure) {
+    static String makeAsXML(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = Filter) Closure closure) {
         Filter filter = new Filter()
         closure.delegate = filter
         closure()
@@ -21,10 +21,10 @@ class Filter {
         code()
     }
 
-    private static String doXml(Filter memoDsl) {
+    private static String doXml(Filter filter) {
         XmlMapper mapper = new XmlMapper();
         mapper.setPropertyNamingStrategy(PropertyNamingStrategy.PASCAL_CASE_TO_CAMEL_CASE)
-        return mapper.writeValueAsString(memoDsl)
+        return mapper.writeValueAsString(filter)
     }
 
 }
