@@ -1,6 +1,6 @@
 package com.ghostbuster.warsawApi
 
-import groovy.transform.CompileStatic;
+import groovy.transform.CompileStatic
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.cache.CacheManager
@@ -19,6 +19,6 @@ class Application {
 
     @Bean
     CacheManager cacheManager() {
-        return new ConcurrentMapCacheManager("properties")
+        return new ConcurrentMapCacheManager("properties",'subway')
     }
 }

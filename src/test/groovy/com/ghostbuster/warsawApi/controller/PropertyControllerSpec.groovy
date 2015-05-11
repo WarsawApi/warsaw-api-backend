@@ -9,11 +9,10 @@ import org.springframework.web.client.RestTemplate
 final class PropertyControllerSpec extends SpringTestRunner {
 
 
-    void "should return two properties on /search endpoint"() {
+    void "should return properties on /search endpoint"() {
         when:
         ResponseEntity<Property[]> entity = new RestTemplate().getForEntity("http://localhost:8080/search", Property[].class)
         then:
         entity.statusCode == HttpStatus.OK
-        entity.body.length <= 5
     }
 }
