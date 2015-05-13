@@ -1,6 +1,6 @@
 package com.ghostbuster.warsawApi.consumer.warsaw
 
-import com.ghostbuster.warsawApi.domain.common.Coordinate
+import com.ghostbuster.warsawApi.domain.external.warsaw.Coordinate
 
 class WarsawApiRequestBuilder {
 

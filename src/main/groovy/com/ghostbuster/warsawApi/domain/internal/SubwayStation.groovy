@@ -8,12 +8,12 @@ import groovy.transform.EqualsAndHashCode
 @CompileStatic
 @Canonical
 @EqualsAndHashCode(excludes = "apiInfo")
-class SubwayStation implements Location{
+class SubwayStation extends Location{
 
     String id
 
     public SubwayStation(WarsawData entity){
-        coordinate = entity.getFirstCoordinate()
+        super(entity.getFirstCoordinate())
         id = entity.getKeyValue('OBJECTID')
     }
 

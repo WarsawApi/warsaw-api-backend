@@ -1,11 +1,20 @@
 package com.ghostbuster.warsawApi.domain.internal
 
-import com.ghostbuster.warsawApi.domain.common.Coordinate
+import com.ghostbuster.warsawApi.domain.external.warsaw.Coordinate
+import groovy.transform.CompileStatic
 
-trait Location {
+@CompileStatic
+class Location {
 
-    String latitude
-    String longitude
+    final String latitude
+    final String longitude
+
+    Location(){}
+
+    Location(Coordinate coordinate){
+        this.latitude = coordinate.latitude
+        this.longitude = coordinate.longitude
+    }
 
     Double distanceTo(Location location) {
         Double x1 = latitude.toDouble()
@@ -14,11 +23,6 @@ trait Location {
         Double y2 = location.longitude.toDouble()
 
         return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
-    }
-
-    void setCoordinate(Coordinate coordinate){
-        this.latitude = coordinate.latitude
-        this.longitude = coordinate.longitude
     }
 }
 
