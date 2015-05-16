@@ -11,6 +11,10 @@ class WarsawApiRequestBuilder {
     private final static String CYCLES_STATION = 'd2f0c41f-cda1-440a-8a27-f01f724529f8'
     private final static String PARK_AND_RIDE = '157648fd-a603-4861-af96-884a8e35b155'
     private final static String THEATERS ='e26218cb-61ec-4ccb-81cc-fd19a6fee0f8'
+    private final static String POOLS = '8c34025d-df36-4507-9eae-cf714f6fc414'
+    private final static String FOOTBALL_COURT = '9317a2dc-d08a-41bc-874d-01cc2dc88006'
+    private final static String DEPARTMENTS = '4e9a942e-2bf8-4c9d-ac1f-1ccc30c4f62d'
+    private final static String POLICE_STATION = '85f567f1-bb56-4657-a30e-afd80544fc7f'
 
     private final StringBuilder url = new StringBuilder("https://api.um.warszawa.pl/api/action/wfsstore_get/?id=")
 
@@ -40,6 +44,22 @@ class WarsawApiRequestBuilder {
 
     static WarsawApiRequestBuilder forTheaters(){
         return new WarsawApiRequestBuilder(THEATERS)
+    }
+
+    static WarsawApiRequestBuilder forPoliceStations(){
+        return new WarsawApiRequestBuilder(POLICE_STATION)
+    }
+
+    static WarsawApiRequestBuilder forPools(){
+        return new WarsawApiRequestBuilder(POOLS)
+    }
+
+    static WarsawApiRequestBuilder forFootballCourts(){
+        return new WarsawApiRequestBuilder(FOOTBALL_COURT)
+    }
+
+    static WarsawApiRequestBuilder forDepartments(){
+        return new WarsawApiRequestBuilder(DEPARTMENTS)
     }
 
     WarsawApiRequestBuilder limitResults(Integer limit){
