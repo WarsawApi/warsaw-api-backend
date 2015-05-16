@@ -2,12 +2,25 @@ package com.ghostbuster.warsawApi.domain.internal
 
 import com.ghostbuster.warsawApi.domain.external.warsaw.Coordinate
 import groovy.transform.CompileStatic
+import groovy.transform.TupleConstructor
+
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.Id
 
 @CompileStatic
+@TupleConstructor
+@Entity
 class Location {
+
+    @Id
+    @GeneratedValue
+    final long id
 
     final String latitude
     final String longitude
+
+    final String address
 
     Location(){}
 
