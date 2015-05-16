@@ -11,8 +11,9 @@ import groovy.transform.EqualsAndHashCode
 class Property extends Location{
 
     final String id
-    final String name
+    final String address
     final String url
+    final Distances distances
 
     final WarsawApiInfo apiInfo = new WarsawApiInfo()
 
@@ -21,7 +22,7 @@ class Property extends Location{
     public Property(WarsawData entity){
         super(entity.getFirstCoordinate())
         id = entity.getKeyValue('ID')
-        name = '?'
+        address = '?'
         url = entity.getKeyValue('OGLOSZENIE')
     }
 

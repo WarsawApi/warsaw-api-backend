@@ -5,7 +5,6 @@ import com.ghostbuster.warsawApi.domain.external.warsaw.Response
 import com.ghostbuster.warsawApi.domain.external.warsaw.WarsawData
 import com.ghostbuster.warsawApi.domain.internal.Property
 import com.ghostbuster.warsawApi.domain.internal.SubwayStation
-import groovy.transform.CompileDynamic
 import groovy.transform.CompileStatic
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Component
@@ -38,8 +37,7 @@ class WarsawApiConsumer {
         return response.result.featureMemberList.collect { WarsawData data -> new Property(data) }.first()
     }
 
-    @CompileDynamic
-    private String createIdFilter(id) {
+    private String createIdFilter(String id) {
         return Filter.makeAsXML {
             propertyIsLike {
                 propertyName 'ID'

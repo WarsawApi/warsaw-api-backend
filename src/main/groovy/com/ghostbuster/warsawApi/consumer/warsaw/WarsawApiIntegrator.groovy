@@ -1,5 +1,6 @@
 package com.ghostbuster.warsawApi.consumer.warsaw
 
+import com.ghostbuster.warsawApi.domain.internal.Location
 import com.ghostbuster.warsawApi.domain.internal.Property
 import com.ghostbuster.warsawApi.domain.internal.SubwayStation
 import groovy.transform.CompileStatic
@@ -23,8 +24,8 @@ class WarsawApiIntegrator {
         return apiProvider.getById(id)
     }
 
-    Integer calculateScoreForProperty(List<SubwayStation> stations, Integer metroWeigth,Property property){
-        return stations*.distanceTo(property).min() * metroWeigth
+    Integer calculateScoreForProperty(List<Location> locations, Integer weight,Property property){
+        return locations*.distanceTo(property).min() * weight
     }
 
 }
