@@ -24,6 +24,7 @@ class Property extends Location{
         id = entity.getKeyValue('ID')
         address = '?'
         url = entity.getKeyValue('OGLOSZENIE')
+        distances = new Distances()
     }
 
 }

@@ -15,17 +15,23 @@ class WarsawApiIntegrator {
     private WarsawApiConsumer apiProvider
 
 
-    public List<Property> search(Integer school, Integer metro){
+    public List<Property> search(Integer school, Integer metro) {
         List<SubwayStation> stations = apiProvider.getAllSubwayStations()
-        return apiProvider.getAllProperties().sort(this.&calculateScoreForProperty.curry(stations,metro))
+        List<Property> properties = apiProvider.getAllProperties()
+
+        properties.each {
+            it.distances.metro = calculateMinDistance(stations, it)
+        }
+
+        return properties.sort({calculateMinDistance(stations,it) * metro})
     }
 
     public Property getById(String id) {
         return apiProvider.getById(id)
     }
 
-    Integer calculateScoreForProperty(List<Location> locations, Integer weight,Property property){
-        return locations*.distanceTo(property).min() * weight
+    Integer calculateMinDistance(List<? extends Location> locations, Property property) {
+        return locations*.distanceTo(property).min()
     }
 
 }
