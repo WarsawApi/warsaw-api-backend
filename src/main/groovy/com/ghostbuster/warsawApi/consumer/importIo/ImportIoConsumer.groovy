@@ -26,10 +26,11 @@ class ImportIoConsumer {
     private Property createPropertyFromGumtree(gumProperty) {
         Property property = new Property()
         def randomGen = new Random()
-        property.longitude = 21.016667 + randomGen.nextInt() % 100 / 1000
-        property.latitude = 52.233333 + randomGen.nextInt() % 100 / 1000
+        property.longitude = 21.016667 + randomGen.nextInt() % 100 / 10000
+        property.latitude = 52.233333 + randomGen.nextInt() % 100 / 10000
         property.url = gumProperty.adlinksb_link
         property.imageUrl = gumProperty.thumbnail_image
+        property.price = gumProperty.arprice_value
         property.address = addresses.get(Math.abs(randomGen.nextInt()) % addresses.size())
         return property
     }

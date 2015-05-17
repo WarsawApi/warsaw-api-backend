@@ -14,6 +14,7 @@ class Property extends Location{
     String address
     String url
     Distances distances
+    String price
     String imageUrl
 
     final WarsawApiInfo apiInfo = new WarsawApiInfo()
