@@ -15,12 +15,12 @@ class Location {
 
     @Id
     @GeneratedValue
-    final long id
+    long id
 
-    final String latitude
-    final String longitude
+    String latitude
+    String longitude
 
-    final String address
+    String address
 
     Location(){}
 
