@@ -10,10 +10,11 @@ import groovy.transform.EqualsAndHashCode
 @EqualsAndHashCode(excludes = "apiInfo")
 class Property extends Location{
 
-    final String objectId
-    final String address
-    final String url
-    final Distances distances
+    String objectId
+    String address
+    String url
+    Distances distances
+    String imageUrl
 
     final WarsawApiInfo apiInfo = new WarsawApiInfo()
 
