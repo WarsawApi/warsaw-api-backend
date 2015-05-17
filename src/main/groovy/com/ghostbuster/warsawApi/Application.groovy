@@ -54,27 +54,29 @@ class Application {
         LocalContainerEntityManagerFactoryBean entityManagerFactory =
                 new LocalContainerEntityManagerFactoryBean();
 
-        entityManagerFactory.setDataSource(dataSource);
+        entityManagerFactory.setDataSource(dataSource)
 
+        entityManagerFactory.setPackagesToScan(
+                'com.ghostbuster.warsawApi.domain')
 
         // Vendor adapter
-        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter()
         entityManagerFactory.setJpaVendorAdapter(vendorAdapter);
 
         // Hibernate properties
-        Properties additionalProperties = new Properties();
+        Properties additionalProperties = new Properties()
         additionalProperties.put(
                 "hibernate.dialect",
-               'org.hibernate.dialect.PostgreSQLDialect');
+               'org.hibernate.dialect.PostgreSQLDialect')
         additionalProperties.put(
                 "hibernate.show_sql",
-                'true');
+                'true')
         additionalProperties.put(
                 "hibernate.hbm2ddl.auto",
-                'create');
-        entityManagerFactory.setJpaProperties(additionalProperties);
+                'create')
+        entityManagerFactory.setJpaProperties(additionalProperties)
 
-        return entityManagerFactory;
+        return entityManagerFactory
     }
 
 }

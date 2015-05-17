@@ -6,7 +6,6 @@ import groovy.transform.TupleConstructor
 
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
 import javax.persistence.Id
 
 @CompileStatic
@@ -15,7 +14,7 @@ import javax.persistence.Id
 class Location {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     long id
 
     String latitude
