@@ -50,10 +50,14 @@ class WarsawApiIntegrator {
 
     List<Location> retrieveNightLifeLocations(){
         return importIoConsumer.nigthLifeLocations.collect{
+            Integer counter = 0;
             Location result = locationRepository.findByAddress(it)
-            if(result == null){
+            if(result == null && it != null){
                 result = geocoder.geocode(it)
                 locationRepository.save(result)
+            }
+            if(counter++ %5){
+                Thread.sleep(1001)
             }
             return result
         }
