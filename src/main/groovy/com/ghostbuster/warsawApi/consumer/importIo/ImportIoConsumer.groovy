@@ -30,7 +30,7 @@ class ImportIoConsumer {
         property.latitude = 52.233333 + randomGen.nextInt() % 100 / 1000
         property.url = gumProperty.adlinksb_link
         property.imageUrl = gumProperty.thumbnail_image
-        property.address = addresses.get(randomGen.nextInt() % addresses.size())
+        property.address = addresses.get(Math.abs(randomGen.nextInt()) % addresses.size())
         return property
     }
 }
