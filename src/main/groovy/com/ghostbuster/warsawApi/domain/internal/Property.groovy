@@ -10,7 +10,7 @@ import groovy.transform.EqualsAndHashCode
 @EqualsAndHashCode(excludes = "apiInfo")
 class Property extends Location{
 
-    final String id
+    final String objectId
     final String address
     final String url
     final Distances distances
@@ -21,7 +21,7 @@ class Property extends Location{
 
     public Property(WarsawData entity){
         super(entity.getFirstCoordinate())
-        id = entity.getKeyValue('ID')
+        objectId = entity.getKeyValue('ID')
         address = '?'
         url = entity.getKeyValue('OGLOSZENIE')
         distances = new Distances()

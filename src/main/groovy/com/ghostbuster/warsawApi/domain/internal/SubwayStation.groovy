@@ -10,11 +10,11 @@ import groovy.transform.EqualsAndHashCode
 @EqualsAndHashCode(excludes = "apiInfo")
 class SubwayStation extends Location{
 
-    String id
+    String objectId
 
     public SubwayStation(WarsawData entity){
         super(entity.getFirstCoordinate())
-        id = entity.getKeyValue('OBJECTID')
+        objectId = entity.getKeyValue('OBJECTID')
     }
 
 }
