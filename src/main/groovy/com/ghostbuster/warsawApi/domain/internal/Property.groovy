@@ -8,7 +8,7 @@ import groovy.transform.EqualsAndHashCode
 @CompileStatic
 @Canonical
 @EqualsAndHashCode(excludes = "apiInfo")
-class Property extends Location{
+class Property implements LocationAble {
 
     String objectId
     String address
@@ -17,16 +17,19 @@ class Property extends Location{
     String price
     String imageUrl
 
+    @Delegate(includes = ['distanceTo', 'distancesTo', 'longitude', 'latitude'])
+    Location location
+
     final WarsawApiInfo apiInfo = new WarsawApiInfo()
 
     public Property(){}
 
     public Property(WarsawData entity){
-        super(entity.getFirstCoordinate())
         objectId = entity.getKeyValue('ID')
         address = '?'
         url = entity.getKeyValue('OGLOSZENIE')
         distances = new Distances()
+        location = new Location(entity.getFirstCoordinate())
     }
 
 }

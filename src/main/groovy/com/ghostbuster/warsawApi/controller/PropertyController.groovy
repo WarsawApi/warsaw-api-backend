@@ -1,11 +1,12 @@
 package com.ghostbuster.warsawApi.controller
 
 import com.ghostbuster.warsawApi.consumer.warsaw.WarsawApiIntegrator
-import com.ghostbuster.warsawApi.domain.internal.Location
+import com.ghostbuster.warsawApi.domain.internal.Preference
 import com.ghostbuster.warsawApi.domain.internal.Property
 import com.ghostbuster.warsawApi.domain.internal.Result
 import groovy.transform.CompileStatic
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -15,13 +16,12 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping(produces = "application/json")
 class PropertyController {
 
-
     @Autowired
     WarsawApiIntegrator apiIntegrator
 
     @RequestMapping('/search')
-    public Result search(@RequestParam(value="school", defaultValue = '1') Integer school, @RequestParam(value="metro", defaultValue = '1') Integer metro){
-        return new Result(apiIntegrator.search(school, metro))
+    public Result search(@RequestBody Preference preferences) {
+        return new Result(apiIntegrator.search(preferences))
     }
 
     @RequestMapping('/details')
@@ -29,8 +29,4 @@ class PropertyController {
         return apiIntegrator.getById(id)
     }
 
-    @RequestMapping('/night')
-    public List<Location> night() {
-        return apiIntegrator.retrieveNightLifeLocations()
-    }
 }

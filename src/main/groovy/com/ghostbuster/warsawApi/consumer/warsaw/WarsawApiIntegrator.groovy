@@ -2,8 +2,7 @@ package com.ghostbuster.warsawApi.consumer.warsaw
 
 import com.ghostbuster.warsawApi.consumer.google.GeocodeServiceConsumer
 import com.ghostbuster.warsawApi.consumer.importIo.ImportIoConsumer
-import com.ghostbuster.warsawApi.domain.internal.Location
-import com.ghostbuster.warsawApi.domain.internal.Property
+import com.ghostbuster.warsawApi.domain.internal.*
 import com.ghostbuster.warsawApi.repository.LocationRepository
 import groovy.transform.CompileStatic
 import org.springframework.beans.factory.annotation.Autowired
@@ -26,29 +25,30 @@ class WarsawApiIntegrator {
     private LocationRepository locationRepository
 
 
-    public List<Property> search(Integer school, Integer metro) {
-//        List<SubwayStation> stations = warsawConsumer.getAllSubwayStations()
-//        List<Property> properties = warsawConsumer.getAllProperties()
+    public List<Property> search(Preference preferences) {
+        List<SubwayStation> stations = warsawConsumer.subwayStations
+
+        Integer metro = 1;
+
+        List<Property> properties = importIoConsumer.propertiesFromOtoDom as List<Property>
+        properties.each {
+            it.distances.metro = calculateMinDistance(stations, it)
+        }
+
+        List<LocationAble> nightLife = retrieveNightLifeLocations()
 //
-//        properties.each {
-//            it.distances.metro = calculateMinDistance(stations, it)
-//        }
-//
-//        List<Location> nightLife = retrieveNightLifeLocations()
-//
-//        return properties.sort({calculateMinDistance(stations,it) * metro})
-        return importIoConsumer.getPropertiesFromGumtree()
+        return properties.sort({ calculateMinDistance(stations, it) * metro })
     }
 
     public Property getById(String id) {
         return warsawConsumer.getById(id)
     }
 
-    Integer calculateMinDistance(List<? extends Location> locations, Property property) {
-        return locations*.distanceTo(property).min()
+    Integer calculateMinDistance(List<? extends LocationAble> locations, Property property) {
+        return property.distancesTo(locations).min()
     }
 
-    List<Location> retrieveNightLifeLocations(){
+    List<LocationAble> retrieveNightLifeLocations() {
         return importIoConsumer.nigthLifeLocations.collect{
             Integer counter = 0;
             List<Location> result = locationRepository.findByAddress(it)
@@ -60,7 +60,7 @@ class WarsawApiIntegrator {
                 Thread.sleep(1001)
             }
             return result
-        }.flatten()
+        }.flatten() as List<LocationAble>
     }
 
 }

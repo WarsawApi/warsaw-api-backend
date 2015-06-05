@@ -16,6 +16,7 @@ class GeocodeServiceConsumer {
         String country = 'Polska'
         def rootGeocode = new JsonSlurper().parse("https://maps.googleapis.com/maps/api/geocode/json?address=${address.replaceAll(' ', '+')},${city},+${country}&sensor=false&key=AIzaSyDT1c-BXhR8Nd8jMD-f6ud9pVN6dmhJVH4".toURL())
         def locationList = rootGeocode.results.geometry.location
+
         if(!locationList.isEmpty()){
             def location = locationList.first()
             return new Location(latitude: location.lat, longitude: location.lng, address: address)

@@ -47,7 +47,7 @@ class WarsawApiConsumer {
     }
 
     @Cacheable('subway')
-    List<SubwayStation> getAllSubwayStations() {
+    List<SubwayStation> getSubwayStations() {
         RestTemplate restTemplate = new RestTemplate()
         Response response = (Response) restTemplate.getForObject(WarsawApiRequestBuilder
                 .forSubwayStations()
