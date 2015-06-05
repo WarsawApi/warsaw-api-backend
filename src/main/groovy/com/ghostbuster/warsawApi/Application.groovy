@@ -27,53 +27,53 @@ class Application {
     CacheManager cacheManager() {
         return new ConcurrentMapCacheManager("properties",'subway')
     }
-//
-//    @Bean
-//    public DataSource dataSource() {
-//        URI dbUri = new URI(System.getenv("DATABASE_URL"));
-//        String username = dbUri.getUserInfo().split(":")[0]
-//        String password = dbUri.getUserInfo().split(":")[1]
-//        int port = dbUri.getPort()
-//        String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ":" + port + dbUri.getPath()
-//
-//        DataSourceBuilder factory = DataSourceBuilder
-//                .create(this.class.getClassLoader())
-//                .driverClassName('org.postgresql.Driver')
-//                .url(dbUrl)
-//                .username(username)
-//                .password(password)
-//
-//        return factory.build();
-//    }
-//
-//    @Bean
-//    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-//        LocalContainerEntityManagerFactoryBean entityManagerFactory =
-//                new LocalContainerEntityManagerFactoryBean();
-//
-//        entityManagerFactory.setDataSource(dataSource)
-//
-//        entityManagerFactory.setPackagesToScan(
-//                'com.ghostbuster.warsawApi.domain')
-//
-//        // Vendor adapter
-//        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter()
-//        entityManagerFactory.setJpaVendorAdapter(vendorAdapter);
-//
-//        // Hibernate properties
-//        Properties additionalProperties = new Properties()
-//        additionalProperties.put(
-//                "hibernate.dialect",
-//               'org.hibernate.dialect.PostgreSQLDialect')
-//        additionalProperties.put(
-//                "hibernate.show_sql",
-//                'true')
-//        additionalProperties.put(
-//                "hibernate.hbm2ddl.auto",
-//                'create')
-//        entityManagerFactory.setJpaProperties(additionalProperties)
-//
-//        return entityManagerFactory
-//    }
 
+    @Bean
+    public DataSource dataSource() {
+        URI dbUri = new URI(System.getenv("DATABASE_URL"));
+        String username = dbUri.getUserInfo().split(":")[0]
+        String password = dbUri.getUserInfo().split(":")[1]
+        int port = dbUri.getPort()
+        String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ":" + port + dbUri.getPath()
+
+        DataSourceBuilder factory = DataSourceBuilder
+                .create(this.class.getClassLoader())
+                .driverClassName('org.postgresql.Driver')
+                .url(dbUrl)
+                .username(username)
+                .password(password)
+
+        return factory.build();
+    }
+
+    @Bean
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+        LocalContainerEntityManagerFactoryBean entityManagerFactory =
+                new LocalContainerEntityManagerFactoryBean();
+
+        entityManagerFactory.setDataSource(dataSource)
+
+        entityManagerFactory.setPackagesToScan(
+                'com.ghostbuster.warsawApi.domain')
+
+        // Vendor adapter
+        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter()
+        entityManagerFactory.setJpaVendorAdapter(vendorAdapter);
+
+        // Hibernate properties
+        Properties additionalProperties = new Properties()
+        additionalProperties.put(
+                "hibernate.dialect",
+               'org.hibernate.dialect.PostgreSQLDialect')
+        additionalProperties.put(
+                "hibernate.show_sql",
+                'true')
+        additionalProperties.put(
+                "hibernate.hbm2ddl.auto",
+                'create')
+        entityManagerFactory.setJpaProperties(additionalProperties)
+
+        return entityManagerFactory
+    }
+    
 }
