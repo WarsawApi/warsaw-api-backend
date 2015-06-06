@@ -34,7 +34,7 @@ class WarsawApiIntegrator {
                 .filter(this.&filter.curry(request.filter))
                 .collect(Collectors.toList())
 
-        properties.parallelStream().forEach { it.location = locationService.findByAddress(it.address) }
+        properties.parallelStream().forEach { it.transalateAddress(locationService) }
         properties.parallelStream().forEach { it.calculateScore(scoreCalculator, request.preference) }
 
         return properties.sort { properties.score }.take(10)

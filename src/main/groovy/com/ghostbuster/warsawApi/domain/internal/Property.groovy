@@ -3,6 +3,7 @@ package com.ghostbuster.warsawApi.domain.internal
 import com.ghostbuster.warsawApi.domain.external.warsaw.WarsawData
 import com.ghostbuster.warsawApi.domain.internal.preference.PreferenceAble
 import com.ghostbuster.warsawApi.scoreCalculator.GenericScoreCalculator
+import com.ghostbuster.warsawApi.service.LocationService
 import groovy.transform.Canonical
 import groovy.transform.CompileStatic
 
@@ -55,4 +56,8 @@ class Property implements Localizable {
 
     @Override
     List<Double> distancesTo(List<Localizable> locations) { location.distancesTo(locations) }
+
+    void transalateAddress(LocationService locationService) {
+        location = locationService.findByAddress(address)
+    }
 }
