@@ -7,6 +7,8 @@ import groovy.transform.CompileStatic
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
+import java.util.concurrent.atomic.AtomicInteger
+
 @CompileStatic
 @Service
 class LocationService {
@@ -17,7 +19,7 @@ class LocationService {
     @Autowired
     GeocodeServiceConsumer geocoder
 
-    private int counter = 0
+    private AtomicInteger counter = new AtomicInteger(0)
 
     Location findByAddress(String address) {
         List<Location> result = repository.findByAddress(address)
@@ -27,7 +29,7 @@ class LocationService {
             repository.save(result)
         }
 
-        if (this.counter++ % 5) {
+        if (this.counter.incrementAndGet() % 5) {
             Thread.sleep(1001)
         }
         return result.first()

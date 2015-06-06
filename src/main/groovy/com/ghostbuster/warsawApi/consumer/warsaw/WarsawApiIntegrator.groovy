@@ -3,8 +3,8 @@ package com.ghostbuster.warsawApi.consumer.warsaw
 import com.ghostbuster.warsawApi.consumer.importIo.ImportIoConsumer
 import com.ghostbuster.warsawApi.domain.internal.Preference
 import com.ghostbuster.warsawApi.domain.internal.Property
-import com.ghostbuster.warsawApi.repository.LocationRepository
 import com.ghostbuster.warsawApi.scoreCalculator.GenericScoreCalculator
+import com.ghostbuster.warsawApi.service.LocationService
 import groovy.transform.CompileStatic
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
@@ -20,8 +20,7 @@ class WarsawApiIntegrator {
     private ImportIoConsumer importIoConsumer
 
     @Autowired
-    private LocationRepository locationRepository
-
+    private LocationService locationService
     @Autowired
     private GenericScoreCalculator scoreCalculator
 
@@ -29,7 +28,8 @@ class WarsawApiIntegrator {
     public List<Property> search(Preference preferences) {
         List<Property> properties = importIoConsumer.propertiesFromOtoDom as List<Property>
 
-        properties*.calculateScore(scoreCalculator, preferences)
+        properties.parallelStream().forEach { it.location = locationService.findByAddress(it.address) }
+        properties.parallelStream().forEach { it.calculateScore(scoreCalculator, preferences) }
 
         return properties.sort { properties.score }
     }

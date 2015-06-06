@@ -1,7 +1,7 @@
 package com.ghostbuster.warsawApi.domain.internal
 
-import com.ghostbuster.warsawApi.consumer.warsaw.NativeJobsParallerer
 import com.ghostbuster.warsawApi.domain.external.warsaw.WarsawData
+import com.ghostbuster.warsawApi.domain.internal.preference.PreferenceAble
 import com.ghostbuster.warsawApi.scoreCalculator.GenericScoreCalculator
 import groovy.transform.Canonical
 import groovy.transform.CompileStatic
@@ -19,6 +19,7 @@ class Property implements Localizable {
     String space
     String roomsCount
 
+    @Delegate
     Location location = new Location()
 
     final private WarsawApiInfo apiInfo = new WarsawApiInfo()
@@ -36,8 +37,8 @@ class Property implements Localizable {
         return distancesTo(locations).min()
     }
 
-    Double calculateScore(GenericScoreCalculator scoreCalculator, Preference preferences) {
-        return NativeJobsParallerer.executeJob(scoreCalculator, this, preferences.extractProperties())
+    void calculateScore(GenericScoreCalculator scoreCalculator, Preference preferences) {
+        score = preferences.extractPropertiesAsStream().mapToDouble { v -> scoreCalculator.calculateScore(this, v as PreferenceAble) }.sum();
     }
 
     @Override
