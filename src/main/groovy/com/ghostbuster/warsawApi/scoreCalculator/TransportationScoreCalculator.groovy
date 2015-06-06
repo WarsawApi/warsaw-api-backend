@@ -6,6 +6,7 @@ import com.ghostbuster.warsawApi.domain.internal.SubwayStation
 import com.ghostbuster.warsawApi.domain.internal.preference.Transportation
 import groovy.transform.CompileStatic
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Component
 
 @CompileStatic
@@ -37,6 +38,7 @@ class TransportationScoreCalculator implements ScoreCalculator<Transportation> {
         return score
     }
 
+    @Cacheable('minDistanceToSubway')
     private Double calculateScoreForSubway(Property property) {
         List<SubwayStation> stations = consumer.subwayStations
 

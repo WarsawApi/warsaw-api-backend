@@ -28,7 +28,8 @@ class Application {
 
     @Bean
     CacheManager cacheManager() {
-        return new ConcurrentMapCacheManager("properties", 'subway', 'bikes', 'locations')
+        return new ConcurrentMapCacheManager("properties", 'subway', 'bikes',
+                'locations', 'minDistanceToBike', 'minDistanceToSubway', 'nightClubs', 'minDistanceToClub')
     }
 
     @Bean

@@ -6,6 +6,7 @@ import com.ghostbuster.warsawApi.domain.internal.Property
 import com.ghostbuster.warsawApi.domain.internal.preference.Recreation
 import groovy.transform.CompileStatic
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Component
 
 @CompileStatic
@@ -44,6 +45,7 @@ class RecreationScoreCalculator implements ScoreCalculator<Recreation> {
         return 0d
     }
 
+    @Cacheable('minDistanceToBike')
     private Double calculateScoreForBikes(Property property) {
         List<Location> bikeStations = consumer.bikesStations
 

@@ -1,5 +1,6 @@
 package com.ghostbuster.warsawApi.consumer.importIo
 
+import com.ghostbuster.warsawApi.domain.internal.Localizable
 import com.ghostbuster.warsawApi.domain.internal.Property
 import groovy.json.JsonSlurper
 import org.springframework.cache.annotation.Cacheable
@@ -8,9 +9,16 @@ import org.springframework.stereotype.Component
 @Component
 class ImportIoConsumer {
 
-    List<String> getNigthLifeLocations(){
+    private List<String> retrieveNightLifeLocations() {
         def root = new JsonSlurper().parse(NIGTH_LIFE_LOCS_URL.toURL())
         return root.results*.venueaddress_value
+    }
+
+    @Cacheable('nightClubs')
+    List<Localizable> getNightLifeLocations() {
+        return importIoConsumer.nigthLifeLocations.collect {
+            locationService.findByAddress(it)
+        }
     }
 
     @Cacheable('properties')

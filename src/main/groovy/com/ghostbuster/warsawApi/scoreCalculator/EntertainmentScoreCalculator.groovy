@@ -7,6 +7,7 @@ import com.ghostbuster.warsawApi.domain.internal.preference.Entertainment
 import com.ghostbuster.warsawApi.service.LocationService
 import groovy.transform.CompileStatic
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Component
 
 @CompileStatic
@@ -26,12 +27,32 @@ class EntertainmentScoreCalculator implements ScoreCalculator<Entertainment> {
 
     @Override
     Double calculateScore(Property property, Entertainment preference) {
-        return 0d
+        Double score = 0d
+
+        if (preference.clubs) {
+            score += calculateScoreForClubs(property)
+        }
+        if (preference.pubs) {
+            score += calculateScoreForPubs(property)
+        }
+        if (preference.restaurants) {
+            score += calculateScoreForRestaurants(property)
+        }
+        return score
     }
 
-    private List<Localizable> retrieveNightLifeLocations() {
-        return importIoConsumer.nigthLifeLocations.collect {
-            locationService.findByAddress(it)
-        }
+    private Double calculateScoreForRestaurants(Property property) {
+        0d
+    }
+
+    private Double calculateScoreForPubs(Property property) {
+        0d
+    }
+
+    @Cacheable('minDistanceToClub')
+    private Double calculateScoreForClubs(Property property) {
+        List<Localizable> locations = importIoConsumer.nightLifeLocations
+
+        return property.calculateMinDistance(locations)
     }
 }
