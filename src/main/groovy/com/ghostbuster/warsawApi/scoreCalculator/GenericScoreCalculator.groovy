@@ -15,7 +15,9 @@ class GenericScoreCalculator {
 
     @Autowired
     GenericScoreCalculator(List<? extends ScoreCalculator> calculators) {
-        calculators.each { ScoreCalculator v -> preferenceCalculators.put(v.classOfPreference(), v) }
+        calculators.each {
+            ScoreCalculator v -> preferenceCalculators.put(v.classOfPreference(), v)
+        }
     }
 
     Double calculateScore(Property property, PreferenceAble pref) {

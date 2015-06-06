@@ -3,6 +3,7 @@ package com.ghostbuster.warsawApi.consumer.warsaw
 import com.ghostbuster.warsawApi.consumer.warsaw.dsl.Filter
 import com.ghostbuster.warsawApi.domain.external.warsaw.Response
 import com.ghostbuster.warsawApi.domain.external.warsaw.WarsawData
+import com.ghostbuster.warsawApi.domain.internal.Location
 import com.ghostbuster.warsawApi.domain.internal.Property
 import com.ghostbuster.warsawApi.domain.internal.SubwayStation
 import groovy.transform.CompileStatic
@@ -13,18 +14,6 @@ import org.springframework.web.client.RestTemplate
 @CompileStatic
 @Component
 class WarsawApiConsumer {
-
-    @Cacheable("properties")
-    List<Property> getAllProperties() {
-        RestTemplate restTemplate = new RestTemplate()
-        Response response = (Response) restTemplate.getForObject(WarsawApiRequestBuilder
-                .forPropertyRent()
-                .build(),
-                Response.class)
-        return response.result.featureMemberList.collect { WarsawData data -> new Property(data) }
-    }
-
-    //odleglosc * waga
 
     @Cacheable("properties")
     Property getById(String id) {
@@ -54,6 +43,15 @@ class WarsawApiConsumer {
                 .build(),
                 Response.class)
         return response.result.featureMemberList.collect { WarsawData data -> new SubwayStation(data) }
+    }
 
+    @Cacheable('bikes')
+    List<Location> getBikesStations() {
+        RestTemplate restTemplate = new RestTemplate()
+        Response response = (Response) restTemplate.getForObject(WarsawApiRequestBuilder
+                .forBikesStation()
+                .build(),
+                Response.class)
+        return response.result.featureMemberCoordinates.collect { new Location(it) }
     }
 }

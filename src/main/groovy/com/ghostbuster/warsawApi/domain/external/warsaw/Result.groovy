@@ -7,4 +7,5 @@ import groovy.transform.CompileStatic
 @JsonIgnoreProperties(ignoreUnknown = true)
 class Result {
     List<WarsawData> featureMemberList
+    List<Coordinate> featureMemberCoordinates
 }

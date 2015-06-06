@@ -10,12 +10,12 @@ import org.springframework.stereotype.Component
 class CultureScoreCalculator implements ScoreCalculator<Culture> {
 
     @Override
-    Double calculateScore(Property property, Culture preference) {
-        return 0d
+    Class<Culture> classOfPreference() {
+        return Culture
     }
 
     @Override
-    Class<Culture> classOfPreference() {
-        return Culture
+    Double calculateScore(Property property, Culture preference) {
+        return 0d
     }
 }

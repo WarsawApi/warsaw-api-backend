@@ -20,13 +20,13 @@ class EntertainmentScoreCalculator implements ScoreCalculator<Entertainment> {
     private LocationService locationService
 
     @Override
-    Double calculateScore(Property property, Entertainment preference) {
-        return 0d
+    Class<Entertainment> classOfPreference() {
+        return Entertainment
     }
 
     @Override
-    Class<Entertainment> classOfPreference() {
-        return Entertainment
+    Double calculateScore(Property property, Entertainment preference) {
+        return 0d
     }
 
     private List<Localizable> retrieveNightLifeLocations() {

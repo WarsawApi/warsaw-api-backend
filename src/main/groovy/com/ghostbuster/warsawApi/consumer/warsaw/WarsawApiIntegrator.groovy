@@ -31,7 +31,7 @@ class WarsawApiIntegrator {
         properties.parallelStream().forEach { it.location = locationService.findByAddress(it.address) }
         properties.parallelStream().forEach { it.calculateScore(scoreCalculator, preferences) }
 
-        return properties.sort { properties.score }
+        return properties.sort { properties.score }.take(10)
     }
 
     public Property getById(String id) {

@@ -8,7 +8,7 @@ class WarsawApiRequestBuilder {
     private final static String PROPERTY_RENT = '45ba10ab-6562-49ce-b572-6c9b999464d6'
     private final static String PROPERTY_PURCHASE = 'baa1d9c9-4a90-401d-b215-57b1ed09e694'
     private final static String SUBWAY_ENTRANCE = '0ac7f6d1-a26b-430f-9e3d-a41c5356b9a3'
-    private final static String CYCLES_STATION = 'd2f0c41f-cda1-440a-8a27-f01f724529f8'
+    private final static String BIKES_STATION = 'd2f0c41f-cda1-440a-8a27-f01f724529f8'
     private final static String PARK_AND_RIDE = '157648fd-a603-4861-af96-884a8e35b155'
     private final static String THEATERS ='e26218cb-61ec-4ccb-81cc-fd19a6fee0f8'
     private final static String POOLS = '8c34025d-df36-4507-9eae-cf714f6fc414'
@@ -34,8 +34,8 @@ class WarsawApiRequestBuilder {
         return new WarsawApiRequestBuilder(SUBWAY_ENTRANCE)
     }
 
-    static WarsawApiRequestBuilder forCyclesStation(){
-        return new WarsawApiRequestBuilder(CYCLES_STATION)
+    static WarsawApiRequestBuilder forBikesStation() {
+        return new WarsawApiRequestBuilder(BIKES_STATION)
     }
 
     static WarsawApiRequestBuilder forParkAndRide(){
