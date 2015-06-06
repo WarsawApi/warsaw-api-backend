@@ -1,7 +1,7 @@
 package com.ghostbuster.warsawApi.scoreCalculator
 
+import com.ghostbuster.warsawApi.domain.internal.Home
 import com.ghostbuster.warsawApi.domain.internal.Location
-import com.ghostbuster.warsawApi.domain.internal.Property
 import com.ghostbuster.warsawApi.domain.internal.preference.Nearby
 import groovy.transform.CompileStatic
 import org.springframework.stereotype.Component
@@ -17,7 +17,7 @@ class NearbyScoreCalculator implements ScoreCalculator<Nearby> {
     }
 
     @Override
-    Double calculateScore(Property property, Nearby preference) {
+    Double calculateScore(Home property, Nearby preference) {
         Double score = 0d
 
         if (!StringUtils.isEmpty(preference.phrase)) {
@@ -32,11 +32,11 @@ class NearbyScoreCalculator implements ScoreCalculator<Nearby> {
         return score
     }
 
-    Double calculateScoreForLocation(Property property) {
+    Double calculateScoreForLocation(Home property) {
         0d
     }
 
-    Double calculateScoreForPhrase(Property property, String address) {
+    Double calculateScoreForPhrase(Home property, String address) {
         0d
     }
 }

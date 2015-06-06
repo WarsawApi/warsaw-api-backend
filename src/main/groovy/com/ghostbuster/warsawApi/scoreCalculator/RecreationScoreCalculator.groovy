@@ -1,8 +1,8 @@
 package com.ghostbuster.warsawApi.scoreCalculator
 
 import com.ghostbuster.warsawApi.consumer.warsaw.WarsawApiConsumer
+import com.ghostbuster.warsawApi.domain.internal.Home
 import com.ghostbuster.warsawApi.domain.internal.Location
-import com.ghostbuster.warsawApi.domain.internal.Property
 import com.ghostbuster.warsawApi.domain.internal.preference.Recreation
 import groovy.transform.CompileStatic
 import org.springframework.beans.factory.annotation.Autowired
@@ -22,7 +22,7 @@ class RecreationScoreCalculator implements ScoreCalculator<Recreation> {
     }
 
     @Override
-    Double calculateScore(Property property, Recreation preference) {
+    Double calculateScore(Home property, Recreation preference) {
         Double score = 0d
 
         if (preference.bikes) {
@@ -37,16 +37,16 @@ class RecreationScoreCalculator implements ScoreCalculator<Recreation> {
         return score
     }
 
-    private Double calculateScoreForParks(Property property) {
+    private Double calculateScoreForParks(Home property) {
         return 0d
     }
 
-    private Double calculateScoreForReservoirs(Property property) {
+    private Double calculateScoreForReservoirs(Home property) {
         return 0d
     }
 
     @Cacheable('minDistanceToBike')
-    private Double calculateScoreForBikes(Property property) {
+    private Double calculateScoreForBikes(Home property) {
         List<Location> bikeStations = consumer.bikesStations
 
         return property.calculateMinDistance(bikeStations)

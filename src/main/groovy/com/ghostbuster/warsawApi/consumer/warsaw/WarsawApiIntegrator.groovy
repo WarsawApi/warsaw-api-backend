@@ -2,7 +2,7 @@ package com.ghostbuster.warsawApi.consumer.warsaw
 
 import com.ghostbuster.warsawApi.consumer.importIo.ImportIoConsumer
 import com.ghostbuster.warsawApi.domain.internal.AggregatedFilter
-import com.ghostbuster.warsawApi.domain.internal.Property
+import com.ghostbuster.warsawApi.domain.internal.Home
 import com.ghostbuster.warsawApi.domain.internal.Request
 import com.ghostbuster.warsawApi.scoreCalculator.GenericScoreCalculator
 import com.ghostbuster.warsawApi.service.LocationService
@@ -28,23 +28,22 @@ class WarsawApiIntegrator {
     private GenericScoreCalculator scoreCalculator
 
 
-    public List<Property> search(Request request) {
-        List<Property> properties = importIoConsumer.propertiesFromOtoDom
+    public List<Home> search(Request request) {
+        return importIoConsumer.propertiesFromOtoDom
                 .parallelStream()
                 .filter(this.&filter.curry(request.filter))
+                .map { it.transalateAddress(locationService) }
+                .map { it.calculateScore(scoreCalculator, request.preference) }
                 .collect(Collectors.toList())
-
-        properties.parallelStream().forEach { it.transalateAddress(locationService) }
-        properties.parallelStream().forEach { it.calculateScore(scoreCalculator, request.preference) }
-
-        return properties.sort { properties.score }.take(10)
+                .sort { properties.score }
+                .take(10)
     }
 
-    boolean filter(AggregatedFilter filter, Property property) {
+    boolean filter(AggregatedFilter filter, Home property) {
         return filter?.applyFilter(property) ?: true
     }
 
-    public Property getById(String id) {
+    public Home getById(String id) {
         return warsawConsumer.getById(id)
     }
 

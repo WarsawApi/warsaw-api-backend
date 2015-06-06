@@ -9,7 +9,7 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 @Canonical
-class Property implements Localizable {
+class Home implements Localizable {
 
     String objectId
     String url
@@ -25,9 +25,9 @@ class Property implements Localizable {
 
     final private WarsawApiInfo apiInfo = new WarsawApiInfo()
 
-    public Property() {}
+    public Home() {}
 
-    public Property(WarsawData entity) {
+    public Home(WarsawData entity) {
         objectId = entity.getKeyValue('ID')
         location.address = '?'
         url = entity.getKeyValue('OGLOSZENIE')
@@ -38,8 +38,9 @@ class Property implements Localizable {
         return distancesTo(locations).min()
     }
 
-    void calculateScore(GenericScoreCalculator scoreCalculator, Preference preferences) {
-        score = preferences.extractPropertiesAsStream().mapToDouble { v -> scoreCalculator.calculateScore(this, v as PreferenceAble) }.sum();
+    Home calculateScore(GenericScoreCalculator scoreCalculator, Preference preferences) {
+        score = preferences.extractPropertiesAsStream().mapToDouble { v -> scoreCalculator.calculateScore(this, v as PreferenceAble) }.sum()
+        return this
     }
 
     @Override
@@ -57,7 +58,8 @@ class Property implements Localizable {
     @Override
     List<Double> distancesTo(List<Localizable> locations) { location.distancesTo(locations) }
 
-    void transalateAddress(LocationService locationService) {
+    Home transalateAddress(LocationService locationService) {
         location = locationService.findByAddress(address)
+        return this
     }
 }

@@ -1,6 +1,6 @@
 package com.ghostbuster.warsawApi.scoreCalculator
 
-import com.ghostbuster.warsawApi.domain.internal.Property
+import com.ghostbuster.warsawApi.domain.internal.Home
 import com.ghostbuster.warsawApi.domain.internal.preference.Sport
 import groovy.transform.CompileStatic
 import org.springframework.stereotype.Component
@@ -16,7 +16,7 @@ class SportScoreCalculator implements ScoreCalculator<Sport> {
     }
 
     @Override
-    Double calculateScore(Property property, Sport preference) {
+    Double calculateScore(Home property, Sport preference) {
         Double score = 0d
 
         if (preference.fitness) {
@@ -32,15 +32,15 @@ class SportScoreCalculator implements ScoreCalculator<Sport> {
         return score
     }
 
-    private Double calculateScoreForTennis(Property property) {
+    private Double calculateScoreForTennis(Home property) {
         0d
     }
 
-    private Double calculateScoreForPools(Property property) {
+    private Double calculateScoreForPools(Home property) {
         0d
     }
 
-    private Double calculateScoreForFitness(Property property) {
+    private Double calculateScoreForFitness(Home property) {
         0d
     }
 }

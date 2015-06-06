@@ -1,7 +1,7 @@
 package com.ghostbuster.warsawApi.controller
 
 import com.ghostbuster.warsawApi.consumer.warsaw.WarsawApiIntegrator
-import com.ghostbuster.warsawApi.domain.internal.Property
+import com.ghostbuster.warsawApi.domain.internal.Home
 import com.ghostbuster.warsawApi.domain.internal.Request
 import com.ghostbuster.warsawApi.domain.internal.Result
 import groovy.transform.CompileStatic
@@ -25,7 +25,7 @@ class PropertyController {
     }
 
     @RequestMapping('/details')
-    public Property details(@RequestParam(value = "id", required = true) String id) {
+    public Home details(@RequestParam(value = "id", required = true) String id) {
         return apiIntegrator.getById(id)
     }
 

@@ -1,7 +1,7 @@
 package com.ghostbuster.warsawApi.scoreCalculator
 
 import com.ghostbuster.warsawApi.consumer.warsaw.WarsawApiConsumer
-import com.ghostbuster.warsawApi.domain.internal.Property
+import com.ghostbuster.warsawApi.domain.internal.Home
 import com.ghostbuster.warsawApi.domain.internal.SubwayStation
 import com.ghostbuster.warsawApi.domain.internal.preference.Transportation
 import groovy.transform.CompileStatic
@@ -23,7 +23,7 @@ class TransportationScoreCalculator implements ScoreCalculator<Transportation> {
     }
 
     @Override
-    Double calculateScore(Property property, Transportation preference) {
+    Double calculateScore(Home property, Transportation preference) {
         Double score = 0d
 
         if (preference.bus) {
@@ -39,17 +39,17 @@ class TransportationScoreCalculator implements ScoreCalculator<Transportation> {
     }
 
     @Cacheable('minDistanceToSubway')
-    private Double calculateScoreForSubway(Property property) {
+    private Double calculateScoreForSubway(Home property) {
         List<SubwayStation> stations = consumer.subwayStations
 
         return property.calculateMinDistance(stations)
     }
 
-    private Double calculateScoreForBus(Property property) {
+    private Double calculateScoreForBus(Home property) {
         0d
     }
 
-    private Double calculateScoreForTramway(Property property) {
+    private Double calculateScoreForTramway(Home property) {
         0d
     }
 }

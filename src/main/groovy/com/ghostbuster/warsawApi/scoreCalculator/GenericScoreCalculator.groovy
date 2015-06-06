@@ -1,6 +1,6 @@
 package com.ghostbuster.warsawApi.scoreCalculator
 
-import com.ghostbuster.warsawApi.domain.internal.Property
+import com.ghostbuster.warsawApi.domain.internal.Home
 import com.ghostbuster.warsawApi.domain.internal.preference.PreferenceAble
 import groovy.transform.CompileStatic
 import org.springframework.beans.factory.annotation.Autowired
@@ -20,7 +20,7 @@ class GenericScoreCalculator {
         }
     }
 
-    Double calculateScore(Property property, PreferenceAble pref) {
+    Double calculateScore(Home property, PreferenceAble pref) {
         return preferenceCalculators[pref.class].calculateScore(property, pref)
     }
 }

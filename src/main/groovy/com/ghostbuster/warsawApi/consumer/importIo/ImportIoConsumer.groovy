@@ -1,7 +1,7 @@
 package com.ghostbuster.warsawApi.consumer.importIo
 
+import com.ghostbuster.warsawApi.domain.internal.Home
 import com.ghostbuster.warsawApi.domain.internal.Localizable
-import com.ghostbuster.warsawApi.domain.internal.Property
 import groovy.json.JsonSlurper
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Component
@@ -22,10 +22,10 @@ class ImportIoConsumer {
     }
 
     @Cacheable('properties')
-    List<Property> getPropertiesFromOtoDom() {
+    List<Home> getPropertiesFromOtoDom() {
         def root = new JsonSlurper().parse(OTO_DOM_PROPERTIES_URL.toURL())
         return root.results.collect {
-            return new Property(address: it.odshowmap_value,
+            return new Home(address: it.odshowmap_value,
                     price: it.odlisting_value_2_numbers,
                     url: it.odlisting_link_1,
                     measurement: it.odlisting_value_4_numbers,

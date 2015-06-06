@@ -9,19 +9,19 @@ class AggregatedFilter {
     SimpleFilter measurement
     SimpleFilter rooms
 
-    boolean applyFilter(Property property) {
+    boolean applyFilter(Home property) {
         return priceFilter(property) && measurementFilter(property) && roomsFilter(property)
     }
 
-    private void roomsFilter(Property property) {
+    private void roomsFilter(Home property) {
         rooms?.applyFilter(property.roomsCount) ?: true
     }
 
-    private void measurementFilter(Property property) {
+    private void measurementFilter(Home property) {
         measurement?.applyFilter(property.measurement) ?: true
     }
 
-    private void priceFilter(Property property) {
+    private void priceFilter(Home property) {
         price?.applyFilter(property.price) ?: true
     }
 

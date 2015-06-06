@@ -1,8 +1,8 @@
 package com.ghostbuster.warsawApi.scoreCalculator
 
 import com.ghostbuster.warsawApi.consumer.importIo.ImportIoConsumer
+import com.ghostbuster.warsawApi.domain.internal.Home
 import com.ghostbuster.warsawApi.domain.internal.Localizable
-import com.ghostbuster.warsawApi.domain.internal.Property
 import com.ghostbuster.warsawApi.domain.internal.preference.Entertainment
 import com.ghostbuster.warsawApi.service.LocationService
 import groovy.transform.CompileStatic
@@ -26,7 +26,7 @@ class EntertainmentScoreCalculator implements ScoreCalculator<Entertainment> {
     }
 
     @Override
-    Double calculateScore(Property property, Entertainment preference) {
+    Double calculateScore(Home property, Entertainment preference) {
         Double score = 0d
 
         if (preference.clubs) {
@@ -41,16 +41,16 @@ class EntertainmentScoreCalculator implements ScoreCalculator<Entertainment> {
         return score
     }
 
-    private Double calculateScoreForRestaurants(Property property) {
+    private Double calculateScoreForRestaurants(Home property) {
         0d
     }
 
-    private Double calculateScoreForPubs(Property property) {
+    private Double calculateScoreForPubs(Home property) {
         0d
     }
 
     @Cacheable('minDistanceToClub')
-    private Double calculateScoreForClubs(Property property) {
+    private Double calculateScoreForClubs(Home property) {
         List<Localizable> locations = importIoConsumer.nightLifeLocations
 
         return property.calculateMinDistance(locations)

@@ -15,13 +15,11 @@ class Preference {
     Sport sport
     Recreation recreation
 
-    Collection<? extends PreferenceAble> extractProperties() {
-        return properties.findAll { k, v -> k != 'class' }.values().findAll {
-            it != null
-        } as Collection<? extends PreferenceAble>
-    }
 
     Stream<? extends PreferenceAble> extractPropertiesAsStream() {
-        return extractProperties().parallelStream()
+        return properties.entrySet()
+                .parallelStream()
+                .filter { it.key != 'class' && it.value }
+                .map { it.value as PreferenceAble }
     }
 }
