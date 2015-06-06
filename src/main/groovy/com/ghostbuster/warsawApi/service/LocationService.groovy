@@ -5,6 +5,7 @@ import com.ghostbuster.warsawApi.domain.internal.Location
 import com.ghostbuster.warsawApi.repository.LocationRepository
 import groovy.transform.CompileStatic
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
 
 import java.util.concurrent.atomic.AtomicInteger
@@ -21,6 +22,7 @@ class LocationService {
 
     private AtomicInteger counter = new AtomicInteger(0)
 
+    @Cacheable('locations')
     Location findByAddress(String address) {
         List<Location> result = repository.findByAddress(address)
 
