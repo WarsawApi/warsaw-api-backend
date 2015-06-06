@@ -13,4 +13,9 @@ class Preference {
     Sport sport
     Recreation recreation
 
+    Collection<? extends PreferenceAble> extractProperties() {
+        return properties.findAll { k, v -> k != 'class' }.values().findAll {
+            it != null
+        } as Collection<? extends PreferenceAble>
+    }
 }

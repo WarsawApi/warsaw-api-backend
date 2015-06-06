@@ -1,6 +1,8 @@
 package com.ghostbuster.warsawApi.domain.internal
 
+import com.ghostbuster.warsawApi.consumer.warsaw.NativeJobsParallerer
 import com.ghostbuster.warsawApi.domain.external.warsaw.WarsawData
+import com.ghostbuster.warsawApi.scoreCalculator.GenericScoreCalculator
 import groovy.transform.Canonical
 import groovy.transform.CompileStatic
 
@@ -17,17 +19,15 @@ class Property implements Localizable {
     String space
     String roomsCount
 
-    @Delegate
-//(includes = ['distanceTo', 'distancesTo', 'longitude', 'latitude'])
     Location location = new Location()
 
     final private WarsawApiInfo apiInfo = new WarsawApiInfo()
 
-    public Property(){}
+    public Property() {}
 
-    public Property(WarsawData entity){
+    public Property(WarsawData entity) {
         objectId = entity.getKeyValue('ID')
-        address = '?'
+        location.address = '?'
         url = entity.getKeyValue('OGLOSZENIE')
         location = new Location(entity.getFirstCoordinate())
     }
@@ -36,12 +36,22 @@ class Property implements Localizable {
         return distancesTo(locations).min()
     }
 
-    String getLatitude() {}
+    Double calculateScore(GenericScoreCalculator scoreCalculator, Preference preferences) {
+        return NativeJobsParallerer.executeJob(scoreCalculator, this, preferences.extractProperties())
+    }
 
-    String getLongitude() {}
+    @Override
+    String getLatitude() { location.latitude }
 
-    Double distanceTo(Localizable location) {}
+    @Override
+    String getLongitude() { location.longitude }
 
-    List<Double> distancesTo(List<Localizable> locations) {}
+    @Override
+    String getAddress() { location.address }
 
+    @Override
+    Double distanceTo(Localizable location) { location.distanceTo(location) }
+
+    @Override
+    List<Double> distancesTo(List<Localizable> locations) { location.distancesTo(locations) }
 }

@@ -13,7 +13,6 @@ class SubwayStation implements Localizable {
     String objectId
 
     @Delegate
-//(includes = ['distanceTo', 'distancesTo', 'longitude', 'latitude'])
     Location location
 
     public SubwayStation(WarsawData entity){

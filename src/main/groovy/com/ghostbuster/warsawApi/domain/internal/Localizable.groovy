@@ -9,6 +9,8 @@ interface Localizable {
 
     String getLongitude()
 
+    String getAddress()
+
     Double distanceTo(Localizable location)
 
     List<Double> distancesTo(List<Localizable> locations)
