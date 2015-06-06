@@ -16,7 +16,7 @@ class Property implements Localizable {
     String price
     String imageUrl
 
-    String space
+    String measurement
     String roomsCount
 
     @Delegate

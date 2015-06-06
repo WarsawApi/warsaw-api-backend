@@ -1,8 +1,8 @@
 package com.ghostbuster.warsawApi.controller
 
 import com.ghostbuster.warsawApi.consumer.warsaw.WarsawApiIntegrator
-import com.ghostbuster.warsawApi.domain.internal.Preference
 import com.ghostbuster.warsawApi.domain.internal.Property
+import com.ghostbuster.warsawApi.domain.internal.Request
 import com.ghostbuster.warsawApi.domain.internal.Result
 import groovy.transform.CompileStatic
 import org.springframework.beans.factory.annotation.Autowired
@@ -20,8 +20,8 @@ class PropertyController {
     WarsawApiIntegrator apiIntegrator
 
     @RequestMapping('/search')
-    public Result search(@RequestBody Preference preference) {
-        return new Result(apiIntegrator.search(preference))
+    public Result search(@RequestBody Request request) {
+        return new Result(apiIntegrator.search(request))
     }
 
     @RequestMapping('/details')

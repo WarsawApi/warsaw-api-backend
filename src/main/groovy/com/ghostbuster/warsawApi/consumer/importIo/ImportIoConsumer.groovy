@@ -28,7 +28,7 @@ class ImportIoConsumer {
             return new Property(address: it.odshowmap_value,
                     price: it.odlisting_value_2_numbers,
                     url: it.odlisting_link_1,
-                    space: it.odlisting_value_4_numbers,
+                    measurement: it.odlisting_value_4_numbers,
                     roomsCount: it.odlisting_value_3_numbers,
                     imageUrl: it.odimgborder_image)
         }
