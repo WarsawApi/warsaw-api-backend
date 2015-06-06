@@ -20,8 +20,8 @@ class PropertyController {
     WarsawApiIntegrator apiIntegrator
 
     @RequestMapping('/search')
-    public Result search(@RequestBody Preference preferences) {
-        return new Result(apiIntegrator.search(preferences))
+    public Result search(@RequestBody Preference preference) {
+        return new Result(apiIntegrator.search(preference))
     }
 
     @RequestMapping('/details')

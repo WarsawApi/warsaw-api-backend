@@ -3,13 +3,13 @@ package com.ghostbuster.warsawApi.domain.internal
 import groovy.transform.CompileStatic
 
 @CompileStatic
-interface LocationAble {
-
-    Location getLocation()
+interface Localizable {
 
     String getLatitude()
 
     String getLongitude()
 
-    Double distanceTo(LocationAble location)
+    Double distanceTo(Localizable location)
+
+    List<Double> distancesTo(List<Localizable> locations)
 }

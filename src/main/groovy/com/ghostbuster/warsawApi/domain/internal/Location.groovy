@@ -11,7 +11,7 @@ import javax.persistence.Id
 @CompileStatic
 @TupleConstructor
 @Entity
-class Location implements LocationAble {
+class Location implements Localizable {
 
     @Id
     @GeneratedValue
@@ -29,7 +29,8 @@ class Location implements LocationAble {
         this.longitude = coordinate.longitude
     }
 
-    Double distanceTo(LocationAble location) {
+    @Override
+    Double distanceTo(Localizable location) {
         Double x1 = latitude.toDouble()
         Double x2 = location.latitude.toDouble()
         Double y1 = longitude.toDouble()
@@ -38,13 +39,10 @@ class Location implements LocationAble {
         return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2))
     }
 
-    List<Double> distancesTo(List<LocationAble> locations) {
+    @Override
+    List<Double> distancesTo(List<Localizable> locations) {
         return locations*.distanceTo(this)
     }
 
-    @Override
-    Location getLocation() {
-        return this
-    }
 }
 

@@ -8,11 +8,12 @@ import groovy.transform.EqualsAndHashCode
 @CompileStatic
 @Canonical
 @EqualsAndHashCode(excludes = "apiInfo")
-class SubwayStation implements LocationAble {
+class SubwayStation implements Localizable {
 
     String objectId
 
-    @Delegate(includes = ['distanceTo', 'longitude', 'latitude'])
+    @Delegate
+//(includes = ['distanceTo', 'distancesTo', 'longitude', 'latitude'])
     Location location
 
     public SubwayStation(WarsawData entity){

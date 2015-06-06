@@ -1,4 +1,4 @@
-package com.ghostbuster.warsawApi.domain.internal
+package com.ghostbuster.warsawApi.domain.internal.preference
 
 import groovy.transform.CompileStatic
 

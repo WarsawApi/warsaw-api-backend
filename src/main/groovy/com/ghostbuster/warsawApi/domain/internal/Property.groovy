@@ -3,24 +3,25 @@ package com.ghostbuster.warsawApi.domain.internal
 import com.ghostbuster.warsawApi.domain.external.warsaw.WarsawData
 import groovy.transform.Canonical
 import groovy.transform.CompileStatic
-import groovy.transform.EqualsAndHashCode
 
 @CompileStatic
 @Canonical
-@EqualsAndHashCode(excludes = "apiInfo")
-class Property implements LocationAble {
+class Property implements Localizable {
 
     String objectId
-    String address
     String url
-    Distances distances
+    Double score
     String price
     String imageUrl
 
-    @Delegate(includes = ['distanceTo', 'distancesTo', 'longitude', 'latitude'])
-    Location location
+    String space
+    String roomsCount
 
-    final WarsawApiInfo apiInfo = new WarsawApiInfo()
+    @Delegate
+//(includes = ['distanceTo', 'distancesTo', 'longitude', 'latitude'])
+    Location location = new Location()
+
+    final private WarsawApiInfo apiInfo = new WarsawApiInfo()
 
     public Property(){}
 
@@ -28,8 +29,19 @@ class Property implements LocationAble {
         objectId = entity.getKeyValue('ID')
         address = '?'
         url = entity.getKeyValue('OGLOSZENIE')
-        distances = new Distances()
         location = new Location(entity.getFirstCoordinate())
     }
+
+    Double calculateMinDistance(List<? extends Localizable> locations) {
+        return distancesTo(locations).min()
+    }
+
+    String getLatitude() {}
+
+    String getLongitude() {}
+
+    Double distanceTo(Localizable location) {}
+
+    List<Double> distancesTo(List<Localizable> locations) {}
 
 }
