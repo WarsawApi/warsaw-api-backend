@@ -38,7 +38,7 @@ class Home implements Localizable {
         return distancesTo(locations).min()
     }
 
-    Home calculateScore(GenericScoreCalculator scoreCalculator, Preference preferences) {
+    Home calculateScore(GenericScoreCalculator scoreCalculator, Preferences preferences) {
         score = preferences.extractPropertiesAsStream().mapToDouble { v -> scoreCalculator.calculateScore(this, v as PreferenceAble) }.sum()
         return this
     }

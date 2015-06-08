@@ -1,7 +1,7 @@
 package com.ghostbuster.warsawApi.consumer.warsaw
 
 import com.ghostbuster.warsawApi.consumer.importIo.ImportIoConsumer
-import com.ghostbuster.warsawApi.domain.internal.AggregatedFilter
+import com.ghostbuster.warsawApi.domain.internal.Filters
 import com.ghostbuster.warsawApi.domain.internal.Home
 import com.ghostbuster.warsawApi.domain.internal.SearchRequest
 import com.ghostbuster.warsawApi.scoreCalculator.GenericScoreCalculator
@@ -39,7 +39,7 @@ class WarsawApiIntegrator {
                 .take(10)
     }
 
-    boolean filter(AggregatedFilter filter, Home property) {
+    boolean filter(Filters filter, Home property) {
         return filter?.applyFilter(property) ?: true
     }
 
