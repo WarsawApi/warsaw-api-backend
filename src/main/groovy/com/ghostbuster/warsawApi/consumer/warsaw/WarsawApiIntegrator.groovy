@@ -31,9 +31,9 @@ class WarsawApiIntegrator {
     public List<Home> search(Request request) {
         return importIoConsumer.propertiesFromOtoDom
                 .parallelStream()
-                .filter(this.&filter.curry(request.filter))
+                .filter(this.&filter.curry(request.filters))
                 .map { it.transalateAddress(locationService) }
-                .map { it.calculateScore(scoreCalculator, request.preference) }
+                .map { it.calculateScore(scoreCalculator, request.preferences) }
                 .collect(Collectors.toList())
                 .sort { properties.score }
                 .take(10)

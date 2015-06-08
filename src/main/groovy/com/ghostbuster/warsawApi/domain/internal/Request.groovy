@@ -5,7 +5,7 @@ import groovy.transform.CompileStatic
 @CompileStatic
 class Request {
 
-    Preference preference
-    AggregatedFilter filter
+    Preference preferences
+    AggregatedFilter filters
 
 }
