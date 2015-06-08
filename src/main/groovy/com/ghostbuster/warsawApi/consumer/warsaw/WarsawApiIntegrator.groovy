@@ -3,7 +3,7 @@ package com.ghostbuster.warsawApi.consumer.warsaw
 import com.ghostbuster.warsawApi.consumer.importIo.ImportIoConsumer
 import com.ghostbuster.warsawApi.domain.internal.AggregatedFilter
 import com.ghostbuster.warsawApi.domain.internal.Home
-import com.ghostbuster.warsawApi.domain.internal.Request
+import com.ghostbuster.warsawApi.domain.internal.SearchRequest
 import com.ghostbuster.warsawApi.scoreCalculator.GenericScoreCalculator
 import com.ghostbuster.warsawApi.service.LocationService
 import groovy.transform.CompileStatic
@@ -28,7 +28,7 @@ class WarsawApiIntegrator {
     private GenericScoreCalculator scoreCalculator
 
 
-    public List<Home> search(Request request) {
+    public List<Home> search(SearchRequest request) {
         return importIoConsumer.propertiesFromOtoDom
                 .parallelStream()
                 .filter(this.&filter.curry(request.filters))
