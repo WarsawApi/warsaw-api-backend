@@ -13,16 +13,16 @@ class Filters {
         return priceFilter(property) && measurementFilter(property) && roomsFilter(property)
     }
 
-    private void roomsFilter(Home property) {
-        rooms?.applyFilter(property.roomsCount) ?: true
+    private boolean roomsFilter(Home property) {
+        return rooms?.applyFilter(property.roomsCount) ?: true
     }
 
-    private void measurementFilter(Home property) {
-        measurement?.applyFilter(property.measurement) ?: true
+    private boolean measurementFilter(Home property) {
+        return measurement?.applyFilter(property.measurement) ?: true
     }
 
-    private void priceFilter(Home property) {
-        price?.applyFilter(property.price) ?: true
+    private boolean priceFilter(Home property) {
+        return price?.applyFilter(property.price) ?: true
     }
 
 }
