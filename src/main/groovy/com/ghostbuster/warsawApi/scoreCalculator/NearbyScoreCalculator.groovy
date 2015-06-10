@@ -9,7 +9,7 @@ import org.springframework.util.StringUtils
 
 @CompileStatic
 @Component
-final class NearbyScoreCalculator implements ScoreCalculator<Nearby> {
+class NearbyScoreCalculator implements ScoreCalculator<Nearby> {
 
 
     @Override

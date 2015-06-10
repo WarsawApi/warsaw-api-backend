@@ -17,7 +17,7 @@ import javax.sql.DataSource
 @CompileStatic
 @SpringBootApplication
 @EnableCaching
-final class Application {
+class Application {
 
     @Autowired
     private DataSource dataSource

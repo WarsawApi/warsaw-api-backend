@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component
 
 @CompileStatic
 @Component
-final class RecreationScoreCalculator implements ScoreCalculator<Recreation> {
+class RecreationScoreCalculator implements ScoreCalculator<Recreation> {
 
     private final WarsawApiConsumer consumer
 

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component
 
 @CompileStatic
 @Component
-final class TransportationScoreCalculator implements ScoreCalculator<Transportation> {
+class TransportationScoreCalculator implements ScoreCalculator<Transportation> {
 
     private final WarsawApiConsumer consumer
 

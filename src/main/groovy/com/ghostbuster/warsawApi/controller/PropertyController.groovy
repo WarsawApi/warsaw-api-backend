@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController
 @CompileStatic
 @RestController
 @RequestMapping(produces = "application/json")
-final class PropertyController {
+class PropertyController {
 
     private final WarsawApiIntegrator apiIntegrator
 

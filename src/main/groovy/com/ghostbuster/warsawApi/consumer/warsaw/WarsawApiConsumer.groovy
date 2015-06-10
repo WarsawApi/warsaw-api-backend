@@ -13,7 +13,7 @@ import org.springframework.web.client.RestTemplate
 
 @CompileStatic
 @Component
-final class WarsawApiConsumer {
+class WarsawApiConsumer {
 
     @Cacheable("properties")
     Home getById(String id) {

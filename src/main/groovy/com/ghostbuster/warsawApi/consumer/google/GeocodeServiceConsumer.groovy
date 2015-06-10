@@ -5,7 +5,7 @@ import groovy.json.JsonSlurper
 import org.springframework.stereotype.Component
 
 @Component
-final class GeocodeServiceConsumer {
+class GeocodeServiceConsumer {
 
     Location geocode(String address) {
         String city = 'Warszawa'

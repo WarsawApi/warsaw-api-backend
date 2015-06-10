@@ -7,7 +7,7 @@ import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Component
 
 @Component
-final class ImportIoConsumer {
+class ImportIoConsumer {
 
     private List<String> retrieveNightLifeLocations() {
         def root = new JsonSlurper().parse(NIGTH_LIFE_LOCS_URL.toURL())

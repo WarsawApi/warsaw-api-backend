@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger
 
 @CompileStatic
 @Service
-final class LocationService {
+class LocationService {
 
     private final AtomicInteger counter = new AtomicInteger(0)
 

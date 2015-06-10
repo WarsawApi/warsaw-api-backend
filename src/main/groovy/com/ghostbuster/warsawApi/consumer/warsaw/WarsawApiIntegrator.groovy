@@ -14,7 +14,7 @@ import java.util.stream.Collectors
 
 @Component
 @CompileStatic
-final class WarsawApiIntegrator {
+class WarsawApiIntegrator {
 
     @Autowired
     private WarsawApiConsumer warsawConsumer

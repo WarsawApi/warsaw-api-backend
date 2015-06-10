@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component
 
 @CompileStatic
 @Component
-final class SportScoreCalculator implements ScoreCalculator<Sport> {
+class SportScoreCalculator implements ScoreCalculator<Sport> {
 
 
     @Override

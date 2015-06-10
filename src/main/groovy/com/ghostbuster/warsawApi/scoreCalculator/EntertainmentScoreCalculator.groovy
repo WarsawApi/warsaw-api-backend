@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component
 
 @CompileStatic
 @Component
-final class EntertainmentScoreCalculator implements ScoreCalculator<Entertainment> {
+class EntertainmentScoreCalculator implements ScoreCalculator<Entertainment> {
 
     private final ImportIoConsumer importIoConsumer
     private final LocationService locationService
