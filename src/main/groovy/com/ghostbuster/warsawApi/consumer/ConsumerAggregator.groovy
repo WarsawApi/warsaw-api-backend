@@ -1,6 +1,7 @@
-package com.ghostbuster.warsawApi.consumer.warsaw
+package com.ghostbuster.warsawApi.consumer
 
 import com.ghostbuster.warsawApi.consumer.importIo.ImportIoConsumer
+import com.ghostbuster.warsawApi.consumer.warsaw.WarsawApiConsumer
 import com.ghostbuster.warsawApi.domain.internal.Filters
 import com.ghostbuster.warsawApi.domain.internal.Home
 import com.ghostbuster.warsawApi.domain.internal.SearchRequest
@@ -14,7 +15,7 @@ import java.util.stream.Collectors
 
 @Component
 @CompileStatic
-class WarsawApiIntegrator {
+class ConsumerAggregator {
 
     @Autowired
     private WarsawApiConsumer warsawConsumer

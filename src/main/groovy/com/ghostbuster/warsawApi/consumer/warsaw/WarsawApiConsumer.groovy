@@ -6,16 +6,20 @@ import com.ghostbuster.warsawApi.domain.external.warsaw.WarsawData
 import com.ghostbuster.warsawApi.domain.internal.Home
 import com.ghostbuster.warsawApi.domain.internal.Location
 import com.ghostbuster.warsawApi.domain.internal.SubwayStation
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty
 import groovy.transform.CompileStatic
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestTemplate
 
+//TODO: use fail fast strategy for hystrix command or use caching?
 @CompileStatic
 @Component
 class WarsawApiConsumer {
 
     @Cacheable("properties")
+    @HystrixCommand(commandKey = 'Warsaw:properties', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = '5000')])
     Home getById(String id) {
         RestTemplate restTemplate = new RestTemplate()
         Response response = (Response) restTemplate.getForObject(WarsawApiRequestBuilder
@@ -36,6 +40,7 @@ class WarsawApiConsumer {
     }
 
     @Cacheable('subway')
+    @HystrixCommand(commandKey = 'Warsaw:subways', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = '5000')])
     List<SubwayStation> getSubwayStations() {
         RestTemplate restTemplate = new RestTemplate()
         Response response = (Response) restTemplate.getForObject(WarsawApiRequestBuilder
@@ -46,6 +51,7 @@ class WarsawApiConsumer {
     }
 
     @Cacheable('bikes')
+    @HystrixCommand(commandKey = 'Warsaw:bikes', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = '5000')])
     List<Location> getBikesStations() {
         RestTemplate restTemplate = new RestTemplate()
         Response response = (Response) restTemplate.getForObject(WarsawApiRequestBuilder

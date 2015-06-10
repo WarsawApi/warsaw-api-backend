@@ -40,6 +40,11 @@ class LocationService {
         return result.first()
     }
 
+    @Cacheable('locations')
+    List<Location> findByAddresses(Collection<String> address) {
+        return address.collect { findByAddress(it) }
+    }
+
     private List<Location> geocodeAddress(String address) {
         return [geocoder.geocode(address)]
     }

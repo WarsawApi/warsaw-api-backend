@@ -2,26 +2,44 @@ package com.ghostbuster.warsawApi.consumer.importIo
 
 import com.ghostbuster.warsawApi.domain.internal.Home
 import com.ghostbuster.warsawApi.domain.internal.Localizable
+import com.ghostbuster.warsawApi.service.LocationService
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty
 import groovy.json.JsonSlurper
+import groovy.transform.CompileDynamic
+import groovy.transform.CompileStatic
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Component
 
+@CompileStatic
 @Component
 class ImportIoConsumer {
 
-    private List<String> retrieveNightLifeLocations() {
+    LocationService locationService
+
+    @Autowired
+    ImportIoConsumer(LocationService locationService) {
+        this.locationService = locationService
+    }
+
+    @Cacheable('nightClubs')
+    @HystrixCommand(commandKey = 'ImportIO:GeocodeNightClubs', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "5000")])
+    List<Localizable> getNightLifeLocations() {
+        return locationService.findByAddresses(downloadNightLifeAddresses())
+    }
+
+    @CompileDynamic
+    @HystrixCommand(commandKey = 'ImportIO:nightClubs', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "5000")])
+    private List<String> downloadNightLifeAddresses() {
         def root = new JsonSlurper().parse(NIGTH_LIFE_LOCS_URL.toURL())
         return root.results*.venueaddress_value
     }
 
-    @Cacheable('nightClubs')
-    List<Localizable> getNightLifeLocations() {
-        return importIoConsumer.nigthLifeLocations.collect {
-            locationService.findByAddress(it)
-        }
-    }
 
+    @CompileDynamic
     @Cacheable('properties')
+    @HystrixCommand(commandKey = 'ImportIO:properties', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "10000")])
     List<Home> getPropertiesFromOtoDom() {
         def root = new JsonSlurper().parse(OTO_DOM_PROPERTIES_URL.toURL())
         return root.results.collect {

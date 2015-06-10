@@ -35,7 +35,7 @@ final class Home implements Localizable {
     }
 
     Double calculateMinDistance(List<? extends Localizable> locations) {
-        return distancesTo(locations).min()
+        return distancesTo(locations).min() ?: 0d
     }
 
     Home calculateScore(GenericScoreCalculator scoreCalculator, Preferences preferences) {

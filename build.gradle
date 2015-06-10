@@ -39,15 +39,22 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-web") {
         exclude module: "spring-boot-starter-tomcat"
     }
-    compile("org.springframework.boot:spring-boot-starter-data-jpa")
+    compile "org.springframework.boot:spring-boot-starter-data-jpa"
     compile "org.springframework.boot:spring-boot-starter-jetty"
     compile "org.springframework.boot:spring-boot-starter-actuator"
-    compile("org.springframework:spring-context")
+    compile "org.springframework:spring-context"
+    compile "org.springframework.cloud:spring-cloud-starter-hystrix-dashboard:1.0.0.RC2"
+    compile 'org.springframework.cloud:spring-cloud-starter-hystrix:1.0.2.RELEASE'
+    compile 'org.springframework.cloud:spring-cloud-starter-eureka:1.0.2.RELEASE'
+    compile 'org.springframework.cloud:spring-cloud-starter-eureka-server:1.0.2.RELEASE'
+
 
     compile "org.codehaus.groovy:groovy-all:2.4.3"
     compile 'org.codehaus.woodstox:woodstox-core-asl:4.4.1'
     compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.5.3'
     compile 'postgresql:postgresql:9.1-901-1.jdbc4'
+    compile 'com.h2database:h2:1.4.187'
+
 
     testCompile "org.spockframework:spock-core:0.7-groovy-2.0"
     testCompile files('libs/contracto-jvm-core-1.0.jar')
