@@ -5,7 +5,7 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 @JsonIgnoreProperties(ignoreUnknown = true)
-class WarsawData {
+final class WarsawData {
 
     Geometry geometry
     List<KeyValue> properties

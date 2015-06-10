@@ -5,7 +5,7 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 @JsonIgnoreProperties(ignoreUnknown = true)
-class KeyValue {
+final class KeyValue {
 
     String value
     String key

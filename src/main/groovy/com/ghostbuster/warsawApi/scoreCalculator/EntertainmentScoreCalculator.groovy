@@ -12,13 +12,16 @@ import org.springframework.stereotype.Component
 
 @CompileStatic
 @Component
-class EntertainmentScoreCalculator implements ScoreCalculator<Entertainment> {
+final class EntertainmentScoreCalculator implements ScoreCalculator<Entertainment> {
+
+    private final ImportIoConsumer importIoConsumer
+    private final LocationService locationService
 
     @Autowired
-    private ImportIoConsumer importIoConsumer
-
-    @Autowired
-    private LocationService locationService
+    EntertainmentScoreCalculator(ImportIoConsumer importIoConsumer, LocationService locationService) {
+        this.importIoConsumer = importIoConsumer
+        this.locationService = locationService
+    }
 
     @Override
     Class<Entertainment> classOfPreference() {

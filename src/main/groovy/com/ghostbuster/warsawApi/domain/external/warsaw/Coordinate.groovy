@@ -7,7 +7,7 @@ import groovy.transform.TupleConstructor
 @CompileStatic
 @TupleConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-class Coordinate {
+final class Coordinate {
     final String latitude
     final String longitude
 }

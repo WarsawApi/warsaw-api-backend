@@ -5,7 +5,7 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 @JsonIgnoreProperties(ignoreUnknown = true)
-class Geometry {
+final class Geometry {
 
     String type
     List<Coordinate> coordinates

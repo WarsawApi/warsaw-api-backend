@@ -12,15 +12,18 @@ import java.util.concurrent.atomic.AtomicInteger
 
 @CompileStatic
 @Service
-class LocationService {
+final class LocationService {
+
+    private final AtomicInteger counter = new AtomicInteger(0)
+
+    private final LocationRepository repository
+    private final GeocodeServiceConsumer geocoder
 
     @Autowired
-    LocationRepository repository
-
-    @Autowired
-    GeocodeServiceConsumer geocoder
-
-    private AtomicInteger counter = new AtomicInteger(0)
+    LocationService(LocationRepository repository, GeocodeServiceConsumer geocoder) {
+        this.repository = repository
+        this.geocoder = geocoder
+    }
 
     @Cacheable('locations')
     Location findByAddress(String address) {

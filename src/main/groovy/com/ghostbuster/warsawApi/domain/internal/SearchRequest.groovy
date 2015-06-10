@@ -3,7 +3,7 @@ package com.ghostbuster.warsawApi.domain.internal
 import groovy.transform.CompileStatic
 
 @CompileStatic
-class SearchRequest {
+final class SearchRequest {
 
     Preferences preferences
     Filters filters

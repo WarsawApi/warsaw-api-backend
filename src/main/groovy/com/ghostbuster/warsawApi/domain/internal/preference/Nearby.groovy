@@ -6,7 +6,7 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 @Canonical
-class Nearby implements PreferenceAble {
+final class Nearby implements PreferenceAble {
 
     String phrase
 

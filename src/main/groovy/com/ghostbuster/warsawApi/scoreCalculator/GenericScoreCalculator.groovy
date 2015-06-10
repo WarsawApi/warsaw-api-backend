@@ -8,10 +8,10 @@ import org.springframework.stereotype.Component
 
 @CompileStatic
 @Component
-class GenericScoreCalculator {
+final class GenericScoreCalculator {
 
-    private
-    final Map<Class<? extends PreferenceAble>, ? extends ScoreCalculator> preferenceCalculators = new HashMap<>()
+    private final Map<Class<? extends PreferenceAble>,
+            ? extends ScoreCalculator> preferenceCalculators = new HashMap<>()
 
     @Autowired
     GenericScoreCalculator(List<? extends ScoreCalculator> calculators) {

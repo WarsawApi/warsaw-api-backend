@@ -2,7 +2,7 @@ package com.ghostbuster.warsawApi.consumer.warsaw
 
 import com.ghostbuster.warsawApi.domain.external.warsaw.Coordinate
 
-class WarsawApiRequestBuilder {
+final class WarsawApiRequestBuilder {
 
     private final static String API_KEY = 'f466c384-f5cc-4787-af44-1468697daf47'
     private final static String PROPERTY_RENT = '45ba10ab-6562-49ce-b572-6c9b999464d6'

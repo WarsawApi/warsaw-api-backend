@@ -17,7 +17,7 @@ import javax.sql.DataSource
 @CompileStatic
 @SpringBootApplication
 @EnableCaching
-class Application {
+final class Application {
 
     @Autowired
     private DataSource dataSource
@@ -33,8 +33,8 @@ class Application {
     }
 
     @Bean
-    public DataSource dataSource() {
-        URI dbUri = new URI(System.getenv("DATABASE_URL"));
+    DataSource dataSource() {
+        URI dbUri = new URI(System.getenv("DATABASE_URL"))
         String username = dbUri.getUserInfo().split(":")[0]
         String password = dbUri.getUserInfo().split(":")[1]
         int port = dbUri.getPort()
@@ -51,7 +51,7 @@ class Application {
     }
 
     @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+    LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean entityManagerFactory =
                 new LocalContainerEntityManagerFactoryBean();
 

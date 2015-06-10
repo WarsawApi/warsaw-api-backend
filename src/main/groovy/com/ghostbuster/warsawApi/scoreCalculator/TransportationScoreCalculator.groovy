@@ -11,11 +11,14 @@ import org.springframework.stereotype.Component
 
 @CompileStatic
 @Component
-class TransportationScoreCalculator implements ScoreCalculator<Transportation> {
+final class TransportationScoreCalculator implements ScoreCalculator<Transportation> {
 
+    private final WarsawApiConsumer consumer
 
     @Autowired
-    WarsawApiConsumer consumer
+    TransportationScoreCalculator(WarsawApiConsumer consumer) {
+        this.consumer = consumer
+    }
 
     @Override
     Class<Transportation> classOfPreference() {

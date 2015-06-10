@@ -11,7 +11,7 @@ import javax.persistence.Id
 @CompileStatic
 @TupleConstructor
 @Entity
-class Location implements Localizable {
+final class Location implements Localizable {
 
     @Id
     @GeneratedValue

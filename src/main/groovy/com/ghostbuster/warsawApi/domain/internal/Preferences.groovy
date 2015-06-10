@@ -6,7 +6,7 @@ import groovy.transform.CompileStatic
 import java.util.stream.Stream
 
 @CompileStatic
-class Preferences {
+final class Preferences {
 
     Nearby nearby
     Transportation transportation

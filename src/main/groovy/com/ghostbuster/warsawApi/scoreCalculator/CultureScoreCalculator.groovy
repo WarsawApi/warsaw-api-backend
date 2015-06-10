@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component
 
 @CompileStatic
 @Component
-class CultureScoreCalculator implements ScoreCalculator<Culture> {
+final class CultureScoreCalculator implements ScoreCalculator<Culture> {
 
     @Override
     Class<Culture> classOfPreference() {

@@ -5,6 +5,6 @@ import groovy.transform.TupleConstructor
 
 @CompileStatic
 @TupleConstructor
-class Result {
+final class Result {
     List<Home> items
 }

@@ -2,15 +2,11 @@ package com.ghostbuster.warsawApi.consumer.google
 
 import com.ghostbuster.warsawApi.domain.internal.Location
 import groovy.json.JsonSlurper
-import groovy.transform.CompileDynamic
-import groovy.transform.CompileStatic
 import org.springframework.stereotype.Component
 
-@CompileStatic
 @Component
-class GeocodeServiceConsumer {
+final class GeocodeServiceConsumer {
 
-    @CompileDynamic
     Location geocode(String address) {
         String city = 'Warszawa'
         String country = 'Polska'

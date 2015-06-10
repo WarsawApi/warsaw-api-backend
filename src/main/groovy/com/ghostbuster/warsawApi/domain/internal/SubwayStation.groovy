@@ -8,7 +8,7 @@ import groovy.transform.EqualsAndHashCode
 @CompileStatic
 @Canonical
 @EqualsAndHashCode(excludes = "apiInfo")
-class SubwayStation implements Localizable {
+final class SubwayStation implements Localizable {
 
     String objectId
 

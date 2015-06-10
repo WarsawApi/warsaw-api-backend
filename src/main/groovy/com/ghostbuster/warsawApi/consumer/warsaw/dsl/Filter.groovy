@@ -3,7 +3,7 @@ package com.ghostbuster.warsawApi.consumer.warsaw.dsl
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 
-class Filter {
+final class Filter {
 
     PropertyIsLike propertyIsLike
 

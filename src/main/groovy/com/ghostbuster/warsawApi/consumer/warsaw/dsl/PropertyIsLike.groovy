@@ -1,15 +1,15 @@
 package com.ghostbuster.warsawApi.consumer.warsaw.dsl
 
-class PropertyIsLike {
+final class PropertyIsLike {
 
     String propertyName
     String literal
 
-    def propertyName(String propertyName) {
+    void propertyName(String propertyName) {
         this.propertyName = propertyName
     }
 
-    def literal(String literal) {
+    void literal(String literal) {
         this.literal = literal
     }
 

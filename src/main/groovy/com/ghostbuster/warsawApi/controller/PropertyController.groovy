@@ -14,10 +14,14 @@ import org.springframework.web.bind.annotation.RestController
 @CompileStatic
 @RestController
 @RequestMapping(produces = "application/json")
-class PropertyController {
+final class PropertyController {
+
+    private final WarsawApiIntegrator apiIntegrator
 
     @Autowired
-    WarsawApiIntegrator apiIntegrator
+    PropertyController(WarsawApiIntegrator apiIntegrator) {
+        this.apiIntegrator = apiIntegrator
+    }
 
     @RequestMapping('/search')
     public Result search(@RequestBody SearchRequest request) {

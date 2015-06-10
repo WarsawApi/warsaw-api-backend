@@ -4,7 +4,7 @@ import groovy.transform.CompileStatic
 import org.springframework.util.StringUtils
 
 @CompileStatic
-class SimpleFilter {
+final class SimpleFilter {
     String min
     String max
 
