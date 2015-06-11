@@ -30,13 +30,14 @@ class ConsumerAggregator {
 
 
     public List<Home> search(SearchRequest request) {
-        return importIoConsumer.propertiesFromOtoDom
+        List<Home> homes = importIoConsumer.propertiesFromOtoDom
                 .parallelStream()
                 .filter(this.&filter.curry(request.filters))
                 .map { it.transalateAddress(locationService) }
                 .map { it.calculateScore(scoreCalculator, request.preferences) }
                 .collect(Collectors.toList())
-                .sort { -properties.score }
+
+        return homes.sort { -it.score }
                 .take(10)
     }
 
