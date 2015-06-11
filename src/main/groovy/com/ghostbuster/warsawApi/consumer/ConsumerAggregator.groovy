@@ -36,7 +36,7 @@ class ConsumerAggregator {
                 .map { it.transalateAddress(locationService) }
                 .map { it.calculateScore(scoreCalculator, request.preferences) }
                 .collect(Collectors.toList())
-                .sort { properties.score }
+                .sort { -properties.score }
                 .take(10)
     }
 
