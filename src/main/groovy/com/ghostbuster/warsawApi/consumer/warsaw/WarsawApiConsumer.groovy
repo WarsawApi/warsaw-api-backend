@@ -13,12 +13,11 @@ import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestTemplate
 
-//TODO: use fail fast strategy for hystrix command or use caching?
 @CompileStatic
 @Component
 class WarsawApiConsumer {
 
-    @Cacheable("properties")
+    @Cacheable(value = "properties")
     @HystrixCommand(commandKey = 'Warsaw:properties', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = '5000')])
     Home getById(String id) {
         RestTemplate restTemplate = new RestTemplate()
@@ -39,8 +38,9 @@ class WarsawApiConsumer {
         }
     }
 
-    @Cacheable('subway')
-    @HystrixCommand(commandKey = 'Warsaw:subways', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = '5000')])
+    @HystrixCommand(commandKey = 'Warsaw:subways', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = '5000')],
+            fallbackMethod = 'emptyListFallback')
+    @Cacheable(value = 'subway', unless = "#result.isEmpty()")
     List<SubwayStation> getSubwayStations() {
         RestTemplate restTemplate = new RestTemplate()
         Response response = (Response) restTemplate.getForObject(WarsawApiRequestBuilder
@@ -50,8 +50,9 @@ class WarsawApiConsumer {
         return response.result.featureMemberList.collect { WarsawData data -> new SubwayStation(data) }
     }
 
-    @Cacheable('bikes')
-    @HystrixCommand(commandKey = 'Warsaw:bikes', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = '5000')])
+    @HystrixCommand(commandKey = 'Warsaw:bikes', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = '5000')],
+            fallbackMethod = 'emptyListFallback')
+    @Cacheable(value = 'bikes', unless = "#result.isEmpty()")
     List<Location> getBikesStations() {
         RestTemplate restTemplate = new RestTemplate()
         Response response = (Response) restTemplate.getForObject(WarsawApiRequestBuilder
@@ -59,5 +60,10 @@ class WarsawApiConsumer {
                 .build(),
                 Response.class)
         return response.result.featureMemberCoordinates.collect { new Location(it) }
+    }
+
+    @SuppressWarnings('unused')
+    private List<Object> emptyListFallback() {
+        return []
     }
 }

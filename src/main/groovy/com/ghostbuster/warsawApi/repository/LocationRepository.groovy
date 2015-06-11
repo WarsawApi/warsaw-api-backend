@@ -5,5 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface LocationRepository  extends JpaRepository<Location, Long> {
 
-    List<Location> findByAddress(String address)
+    Location findByAddress(String address)
+
+    List<Location> findByAddressIn(List<String> addresses)
 }

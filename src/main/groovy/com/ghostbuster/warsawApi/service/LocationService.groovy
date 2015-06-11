@@ -27,9 +27,9 @@ class LocationService {
 
     @Cacheable('locations')
     Location findByAddress(String address) {
-        List<Location> result = repository.findByAddress(address)
+        Location result = repository.findByAddress(address)
 
-        if (result == null || result.isEmpty()) {
+        if (result == null) {
             result = geocodeAddress(address)
             repository.save(result)
         }
@@ -37,16 +37,22 @@ class LocationService {
         if (this.counter.incrementAndGet() % 5) {
             Thread.sleep(1001)
         }
-        return result.first()
+        return result
     }
 
     @Cacheable('locations')
-    List<Location> findByAddresses(Collection<String> address) {
-        return address.collect { findByAddress(it) }
+    List<Location> findByAddresses(List<String> addresses) {
+        List<Location> locations = repository.findByAddressIn(addresses)
+
+        List<String> notFound = addresses - locations*.address
+
+        List<Location> newlySaved = repository.save(notFound.collect { geocodeAddress(it) })
+
+        return newlySaved + locations
     }
 
-    private List<Location> geocodeAddress(String address) {
-        return [geocoder.geocode(address)]
+    private Location geocodeAddress(String address) {
+        return geocoder.geocode(address)
     }
 
 

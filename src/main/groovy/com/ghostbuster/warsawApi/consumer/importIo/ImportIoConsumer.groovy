@@ -23,23 +23,26 @@ class ImportIoConsumer {
         this.locationService = locationService
     }
 
-    @Cacheable('nightClubs')
-    @HystrixCommand(commandKey = 'ImportIO:GeocodeNightClubs', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "5000")])
+    @HystrixCommand(commandKey = 'ImportIO:GeocodeNightClubs', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "5000")],
+            fallbackMethod = 'emptyListFallback')
+    @Cacheable(value = 'nightClubs', unless = "#result.isEmpty()")
     List<Localizable> getNightLifeLocations() {
         return locationService.findByAddresses(downloadNightLifeAddresses())
     }
 
+    @HystrixCommand(commandKey = 'ImportIO:nightClubs', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "5000")],
+            fallbackMethod = 'emptyListFallback')
     @CompileDynamic
-    @HystrixCommand(commandKey = 'ImportIO:nightClubs', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "5000")])
     private List<String> downloadNightLifeAddresses() {
         def root = new JsonSlurper().parse(NIGTH_LIFE_LOCS_URL.toURL())
         return root.results*.venueaddress_value
     }
 
 
+    @HystrixCommand(commandKey = 'ImportIO:properties', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "10000")],
+            fallbackMethod = 'emptyListFallback')
     @CompileDynamic
-    @Cacheable('properties')
-    @HystrixCommand(commandKey = 'ImportIO:properties', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "10000")])
+    @Cacheable(value = 'properties', unless = "#result.isEmpty()")
     List<Home> getPropertiesFromOtoDom() {
         def root = new JsonSlurper().parse(OTO_DOM_PROPERTIES_URL.toURL())
         return root.results.collect {
@@ -50,6 +53,11 @@ class ImportIoConsumer {
                     roomsCount: it.odlisting_value_3_numbers,
                     imageUrl: it.odimgborder_image)
         }
+    }
+
+    @SuppressWarnings('unused')
+    private List<Object> emptyListFallback() {
+        return []
     }
 
 
