@@ -14,15 +14,15 @@ final class Filters {
     }
 
     private boolean roomsFilter(Home property) {
-        return rooms?.applyFilter(property.roomsCount) ?: true
+        return rooms ? rooms.applyFilter(property.roomsCount) : true
     }
 
     private boolean measurementFilter(Home property) {
-        return measurement?.applyFilter(property.measurement) ?: true
+        return measurement ? measurement.applyFilter(property.measurement) : true
     }
 
     private boolean priceFilter(Home property) {
-        return price?.applyFilter(property.price) ?: true
+        return price ? price.applyFilter(property.price) : true
     }
 
 }

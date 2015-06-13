@@ -42,7 +42,7 @@ class ConsumerAggregator {
     }
 
     boolean filter(Filters filter, Home property) {
-        return filter?.applyFilter(property) ?: true
+        return filter ? filter.applyFilter(property) : true
     }
 
     public Home getById(String id) {
