@@ -37,7 +37,7 @@ class ConsumerAggregator {
                 .map { it.calculateScore(scoreCalculator, request.preferences) }
                 .collect(Collectors.toList())
 
-        return homes.sort { -it.score }
+        return homes.sort { it.score }
                 .take(10)
     }
 
