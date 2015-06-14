@@ -15,21 +15,21 @@ final class SimpleFilter {
         Double doubleVal
         try {
             doubleVal = Double.parseDouble(value)
-        } catch (Exception ex) {
+        } catch (NumberFormatException ignored) {
             return false
         }
 
-        return doubleVal > min && doubleVal < max
+        return doubleVal >= min && doubleVal <= max
     }
 
-    private Double castMinToDouble(String value) {
+    private static Double castMinToDouble(String value) {
         if (!StringUtils.isEmpty(value)) {
             return Double.parseDouble(value)
         }
         return Double.MIN_VALUE
     }
 
-    private Double castMaxToDouble(String value) {
+    private static Double castMaxToDouble(String value) {
         if (!StringUtils.isEmpty(value)) {
             return Double.parseDouble(value)
         }
