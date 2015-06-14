@@ -40,7 +40,7 @@ class WarsawApiConsumer {
 
     @HystrixCommand(commandKey = 'Warsaw:subways', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = '5000')],
             fallbackMethod = 'emptyListFallback')
-    @Cacheable(value = 'subway', unless = "#result.isEmpty()")
+    @Cacheable(value = 'subways', unless = "#result.isEmpty()")
     List<SubwayStation> getSubwayStations() {
         RestTemplate restTemplate = new RestTemplate()
         Response response = (Response) restTemplate.getForObject(WarsawApiRequestBuilder

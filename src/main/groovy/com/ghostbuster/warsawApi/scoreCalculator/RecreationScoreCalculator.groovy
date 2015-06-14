@@ -1,7 +1,9 @@
 package com.ghostbuster.warsawApi.scoreCalculator
 
+import com.ghostbuster.warsawApi.consumer.importIo.ImportIoConsumer
 import com.ghostbuster.warsawApi.consumer.warsaw.WarsawApiConsumer
 import com.ghostbuster.warsawApi.domain.internal.Home
+import com.ghostbuster.warsawApi.domain.internal.Localizable
 import com.ghostbuster.warsawApi.domain.internal.Location
 import com.ghostbuster.warsawApi.domain.internal.preference.Recreation
 import groovy.transform.CompileStatic
@@ -13,11 +15,14 @@ import org.springframework.stereotype.Component
 @Component
 class RecreationScoreCalculator implements ScoreCalculator<Recreation> {
 
-    private final WarsawApiConsumer consumer
+    private final WarsawApiConsumer warsawApi
+
+    private final ImportIoConsumer importIoConsumer
 
     @Autowired
-    RecreationScoreCalculator(WarsawApiConsumer consumer) {
-        this.consumer = consumer
+    RecreationScoreCalculator(WarsawApiConsumer warsawApi, ImportIoConsumer importIoConsumer) {
+        this.warsawApi = warsawApi
+        this.importIoConsumer = importIoConsumer
     }
 
     @Override
@@ -41,8 +46,11 @@ class RecreationScoreCalculator implements ScoreCalculator<Recreation> {
         return score
     }
 
+    @Cacheable('minDistanceToPark')
     private Double calculateScoreForParks(Home property) {
-        return 0d
+        List<Localizable> parksLocations = importIoConsumer.parksLocations
+
+        return property.calculateMinDistance(parksLocations)
     }
 
     private Double calculateScoreForReservoirs(Home property) {
@@ -51,7 +59,7 @@ class RecreationScoreCalculator implements ScoreCalculator<Recreation> {
 
     @Cacheable('minDistanceToBike')
     private Double calculateScoreForBikes(Home property) {
-        List<Location> bikeStations = consumer.bikesStations
+        List<Location> bikeStations = warsawApi.bikesStations
 
         return property.calculateMinDistance(bikeStations)
     }

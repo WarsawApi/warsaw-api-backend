@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Component
 
+//TODO split
 @CompileStatic
 @Component
 class ImportIoConsumer {
@@ -23,14 +24,14 @@ class ImportIoConsumer {
         this.locationService = locationService
     }
 
-    @HystrixCommand(commandKey = 'ImportIO:GeocodeNightClubs', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "5000")],
+    @HystrixCommand(commandKey = 'ImportIO:GeocodeClubs', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "5000")],
             fallbackMethod = 'emptyListFallback')
-    @Cacheable(value = 'nightClubs', unless = "#result.isEmpty()")
+    @Cacheable(value = 'clubs', unless = "#result.isEmpty()")
     List<Localizable> getClubsLocations() {
         return clubs.collect { locationService.findByAddress(it) }
     }
 
-    @HystrixCommand(commandKey = 'ImportIO:nightClubs', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "5000")],
+    @HystrixCommand(commandKey = 'ImportIO:clubs', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "5000")],
             fallbackMethod = 'emptyListFallback')
     @CompileDynamic
     private List<String> getClubs() {

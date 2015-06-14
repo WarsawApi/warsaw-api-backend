@@ -32,10 +32,10 @@ class Application {
 
     @Bean
     CacheManager cacheManager() {
-        return new ConcurrentMapCacheManager("properties", 'subway', 'bikes',
-                'locations', 'minDistanceToBike', 'minDistanceToSubway', 'nightClubs', 'minDistanceToClub',
-                'theaters', 'cinemas', 'exhibitions', 'parks', 'pools', 'fitness', 'tennis',
-                'pubs', 'restaurants')
+        return new ConcurrentMapCacheManager("properties", 'locations', 'minDistanceToBike', 'minDistanceToSubway', 'minDistanceToClub',
+                'minDistanceToTheater', 'minDistanceToCinema', 'minDistanceToeExhibition', 'minDistanceToPark', 'minDistanceToPool', 'minDistanceToFitness', 'minDistanceToTennis',
+                'minDistanceToPub', 'minDistanceToRestaurant', 'minDistanceToLocation', 'minDistanceToPhrase', 'subways', 'bikes', 'clubs', 'theaters', 'cinemas', 'exhibitions',
+                'parks', 'pools', 'fitness', 'tennis', 'pubs', 'restaurants')
     }
 
 

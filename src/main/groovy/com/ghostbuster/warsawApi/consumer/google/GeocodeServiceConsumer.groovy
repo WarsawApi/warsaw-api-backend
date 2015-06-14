@@ -2,13 +2,14 @@ package com.ghostbuster.warsawApi.consumer.google
 
 import com.ghostbuster.warsawApi.domain.internal.Location
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty
 import groovy.json.JsonSlurper
 import org.springframework.stereotype.Component
 
 @Component
 class GeocodeServiceConsumer {
 
-    @HystrixCommand(commandKey = 'Google:geocode')
+    @HystrixCommand(commandKey = 'Google:geocode', commandProperties = [@HystrixProperty(name = 'hystrix.command.default.circuitBreaker.enabled', value = 'false')])
     Location geocode(String address) {
         String city = 'Warszawa'
         String country = 'Polska'

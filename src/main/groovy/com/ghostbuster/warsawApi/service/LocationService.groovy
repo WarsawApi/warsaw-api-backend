@@ -40,16 +40,17 @@ class LocationService {
         return result
     }
 
-    @Cacheable('locations')
-    List<Location> findByAddresses(List<String> addresses) {
-        List<Location> locations = repository.findByAddressIn(addresses)
-
-        List<String> notFound = addresses - locations*.address
-
-        List<Location> newlySaved = repository.save(notFound.collect { geocodeAddress(it) })
-
-        return newlySaved + locations
-    }
+    //throwing error for some reason
+//    @Cacheable('locations')
+//    List<Location> findByAddresses(List<String> addresses) {
+//        List<Location> locations = repository.findByAddressIn(addresses)
+//
+//        List<String> notFound = addresses - locations*.address
+//
+//        List<Location> newlySaved = repository.save(notFound.collect { geocodeAddress(it) })
+//
+//        return newlySaved + locations
+//    }
 
     private Location geocodeAddress(String address) {
         return geocoder.geocode(address)

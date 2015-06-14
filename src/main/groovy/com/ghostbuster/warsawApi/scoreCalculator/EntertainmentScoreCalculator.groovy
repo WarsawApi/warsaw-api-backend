@@ -44,12 +44,18 @@ class EntertainmentScoreCalculator implements ScoreCalculator<Entertainment> {
         return score
     }
 
+    @Cacheable('minDistanceToRestaurant')
     private Double calculateScoreForRestaurants(Home property) {
-        0d
+        List<Localizable> locations = importIoConsumer.restaurantsLocations
+
+        return property.calculateMinDistance(locations)
     }
 
+    @Cacheable('minDistanceToPub')
     private Double calculateScoreForPubs(Home property) {
-        0d
+        List<Localizable> locations = importIoConsumer.pubsLocations
+
+        return property.calculateMinDistance(locations)
     }
 
     @Cacheable('minDistanceToClub')

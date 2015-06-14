@@ -3,7 +3,10 @@ package com.ghostbuster.warsawApi.scoreCalculator
 import com.ghostbuster.warsawApi.domain.internal.Home
 import com.ghostbuster.warsawApi.domain.internal.Location
 import com.ghostbuster.warsawApi.domain.internal.preference.Nearby
+import com.ghostbuster.warsawApi.service.LocationService
 import groovy.transform.CompileStatic
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Component
 import org.springframework.util.StringUtils
 
@@ -11,6 +14,12 @@ import org.springframework.util.StringUtils
 @Component
 class NearbyScoreCalculator implements ScoreCalculator<Nearby> {
 
+    LocationService locationService
+
+    @Autowired
+    NearbyScoreCalculator(LocationService locationService) {
+        this.locationService = locationService
+    }
 
     @Override
     Class<Nearby> classOfPreference() {
@@ -27,17 +36,21 @@ class NearbyScoreCalculator implements ScoreCalculator<Nearby> {
 
         Location loc = preference.location
         if (loc != null && !StringUtils.isEmpty(loc.latitude) && !StringUtils.isEmpty(loc.latitude)) {
-            score += calculateScoreForLocation(property)
+            score += calculateScoreForLocation(property, loc)
         }
 
         return score
     }
 
-    Double calculateScoreForLocation(Home property) {
-        0d
+    @Cacheable('minDistanceToNearby')
+    private Double calculateScoreForLocation(Home property, Location location) {
+        return property.distanceTo(location)
     }
 
-    Double calculateScoreForPhrase(Home property, String address) {
-        0d
+    @Cacheable('minDistanceToPhrase')
+    private Double calculateScoreForPhrase(Home property, String address) {
+        Location location = locationService.findByAddress(address)
+
+        return property.distanceTo(location)
     }
 }

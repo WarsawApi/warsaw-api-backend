@@ -1,14 +1,24 @@
 package com.ghostbuster.warsawApi.scoreCalculator
 
+import com.ghostbuster.warsawApi.consumer.importIo.ImportIoConsumer
 import com.ghostbuster.warsawApi.domain.internal.Home
+import com.ghostbuster.warsawApi.domain.internal.Localizable
 import com.ghostbuster.warsawApi.domain.internal.preference.Sport
 import groovy.transform.CompileStatic
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Component
 
 @CompileStatic
 @Component
 class SportScoreCalculator implements ScoreCalculator<Sport> {
 
+    private final ImportIoConsumer importIoConsumer
+
+    @Autowired
+    SportScoreCalculator(ImportIoConsumer importIoConsumer) {
+        this.importIoConsumer = importIoConsumer
+    }
 
     @Override
     Class<Sport> classOfPreference() {
@@ -32,15 +42,24 @@ class SportScoreCalculator implements ScoreCalculator<Sport> {
         return score
     }
 
+    @Cacheable('minDistanceToTennis')
     private Double calculateScoreForTennis(Home property) {
-        0d
+        List<Localizable> tennis = importIoConsumer.tenninsLocations
+
+        return property.calculateMinDistance(tennis)
     }
 
+    @Cacheable('minDistanceToPool')
     private Double calculateScoreForPools(Home property) {
-        0d
+        List<Localizable> pools = importIoConsumer.poolsLocations
+
+        return property.calculateMinDistance(pools)
     }
 
+    @Cacheable('minDistanceToFitness')
     private Double calculateScoreForFitness(Home property) {
-        0d
+        List<Localizable> fitness = importIoConsumer.fitnessLocations
+
+        return property.calculateMinDistance(fitness)
     }
 }
