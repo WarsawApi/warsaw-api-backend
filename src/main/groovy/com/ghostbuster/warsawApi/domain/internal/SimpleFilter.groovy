@@ -15,7 +15,7 @@ final class SimpleFilter {
         Double doubleVal
         try {
             doubleVal = Double.parseDouble(value)
-        } catch (NumberFormatException ignored) {
+        } catch (NumberFormatException | NullPointerException ignored) {
             return false
         }
 

@@ -7,6 +7,7 @@ import com.ghostbuster.warsawApi.domain.internal.Home
 import com.ghostbuster.warsawApi.domain.internal.SearchRequest
 import com.ghostbuster.warsawApi.scoreCalculator.GenericScoreCalculator
 import com.ghostbuster.warsawApi.service.LocationService
+import groovy.transform.CompileDynamic
 import groovy.transform.CompileStatic
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
@@ -30,7 +31,7 @@ class ConsumerAggregator {
 
 
     public List<Home> search(SearchRequest request) {
-        List<Home> homes = importIoConsumer.propertiesFromOtoDom
+        List<Home> homes = oneCallToGetThemAll()
                 .parallelStream()
                 .filter(this.&filter.curry(request.filters))
                 .map { it.transalateAddress(locationService) }
@@ -47,6 +48,23 @@ class ConsumerAggregator {
 
     public Home getById(String id) {
         return warsawConsumer.getById(id)
+    }
+
+    @CompileDynamic
+    List<Home> oneCallToGetThemAll() {
+        return importIoConsumer.homesPage1
+                .zipWith(importIoConsumer.homesPage1, { a, b -> a + b })
+                .zipWith(importIoConsumer.homesPage2, { a, b -> a + b })
+                .zipWith(importIoConsumer.homesPage3, { a, b -> a + b })
+                .zipWith(importIoConsumer.homesPage4, { a, b -> a + b })
+                .zipWith(importIoConsumer.homesPage5, { a, b -> a + b })
+                .zipWith(importIoConsumer.homesPage6, { a, b -> a + b })
+                .zipWith(importIoConsumer.homesPage7, { a, b -> a + b })
+                .zipWith(importIoConsumer.homesPage8, { a, b -> a + b })
+                .toList()
+                .toBlocking()
+                .single()
+                .first()
     }
 
 }

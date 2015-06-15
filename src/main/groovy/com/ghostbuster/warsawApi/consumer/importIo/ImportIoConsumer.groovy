@@ -11,6 +11,8 @@ import groovy.transform.CompileStatic
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Component
+import rx.Observable
+import rx.schedulers.Schedulers
 
 //TODO split
 @CompileStatic
@@ -39,13 +41,14 @@ class ImportIoConsumer {
         return root.results*.searchresult_value
     }
 
-    @HystrixCommand(commandKey = 'ImportIO:properties', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "10000")],
-            fallbackMethod = 'emptyListFallback')
+    // TODO: uncomment
+//    @HystrixCommand(commandKey = 'ImportIO:properties', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "10000")],
+//            fallbackMethod = 'emptyListFallback')
     @CompileDynamic
     @Cacheable(value = 'properties', unless = "#result.isEmpty()")
-    List<Home> getPropertiesFromOtoDom() {
-        def root = new JsonSlurper().parse(HOMES_URL.toURL())
-        return root.results.collect {
+    private List<Home> getPropertiesFromOtoDom(String url) {
+        List<String> root = new JsonSlurper().parse(url.toURL()).results
+        List<Home> a = root.collect {
             return new Home(address: it.odshowmap_value,
                     price: it.odlisting_value_2_numbers,
                     url: it.odlisting_link_1,
@@ -53,6 +56,95 @@ class ImportIoConsumer {
                     roomsCount: it.odlisting_value_3_numbers,
                     imageUrl: it.odimgborder_image)
         }
+        a.findAll {
+            it.address == null
+        }.each { println 'tutaj 1'; throw new RuntimeException('1') }
+        return a
+    }
+
+    @CompileDynamic
+    @Cacheable(value = 'properties', unless = "#result.isEmpty()")
+    private List<Home> getPropertiesFromOtoDom_Sec(String url) {
+        List<String> root = new JsonSlurper().parse(url.toURL()).results
+        List<Home> a = root.collect {
+            return new Home(address: it.value,
+                    price: it.odlisting_value_2_numbers,
+                    url: it.odlisting_link_1,
+                    measurement: it.odlisting_value_4_numbers,
+                    roomsCount: it.odlisting_value_3_numbers,
+                    imageUrl: it.odimgborder_image)
+        }
+        a.findAll {
+            it.address == null
+        }.each { println 'tutaj 2'; throw new RuntimeException('2') }
+        return a
+    }
+
+
+    @CompileDynamic
+    private Observable<List<Home>> getHomesPageX(String pageUrl) {
+        return Observable.create({ aSubscriber ->
+            try {
+                aSubscriber.onNext(getPropertiesFromOtoDom(pageUrl));
+
+                if (!aSubscriber.isUnsubscribed()) {
+                    aSubscriber.onCompleted();
+                }
+            } catch (Throwable t) {
+                if (!aSubscriber.isUnsubscribed()) {
+                    aSubscriber.onError(t);
+                }
+            }
+        }).subscribeOn(Schedulers.newThread())
+    }
+
+    @CompileDynamic
+    private Observable<List<Home>> getHomesPageX_Sec(String pageUrl) {
+        return Observable.create({ aSubscriber ->
+            try {
+                aSubscriber.onNext(getPropertiesFromOtoDom_Sec(pageUrl));
+
+                if (!aSubscriber.isUnsubscribed()) {
+                    aSubscriber.onCompleted();
+                }
+            } catch (Throwable t) {
+                if (!aSubscriber.isUnsubscribed()) {
+                    aSubscriber.onError(t);
+                }
+            }
+        }).subscribeOn(Schedulers.newThread())
+    }
+
+    Observable<List<Home>> getHomesPage1() {
+        return getHomesPageX(HOMES_URL_PAGE1)
+    }
+
+    Observable<List<Home>> getHomesPage2() {
+        return getHomesPageX(HOMES_URL_PAGE2)
+    }
+
+    Observable<List<Home>> getHomesPage3() {
+        return getHomesPageX(HOMES_ULR_PAGE3)
+    }
+
+    Observable<List<Home>> getHomesPage4() {
+        return getHomesPageX_Sec(HOMES_URL_PAGE4)
+    }
+
+    Observable<List<Home>> getHomesPage5() {
+        return getHomesPageX_Sec(HOMES_URL_PAGE5)
+    }
+
+    Observable<List<Home>> getHomesPage6() {
+        return getHomesPageX_Sec(HOMES_URL_PAGE6)
+    }
+
+    Observable<List<Home>> getHomesPage7() {
+        return getHomesPageX_Sec(HOMES_URL_PAGE7)
+    }
+
+    Observable<List<Home>> getHomesPage8() {
+        return getHomesPageX_Sec(HOMES_URL_PAGE8)
     }
 
 
@@ -225,7 +317,7 @@ class ImportIoConsumer {
             '%2Bg%3D%3D'
 
     private
-    static String HOMES_URL = 'https://api.import.io/store/data/096a49e1-edcf-4e68-9178-fb04f8b1ae35/_query?input/webpage/url=http%3A%2F%2Fotodom.pl%2Findex' +
+    static String HOMES_URL_PAGE1 = 'https://api.import.io/store/data/096a49e1-edcf-4e68-9178-fb04f8b1ae35/_query?input/webpage/url=http%3A%2F%2Fotodom.pl%2Findex' +
             '.php%3Fmod%3Dlisting%26source%3Dmain%26objSearchQuery.ObjectName%3DFlat%26objSearchQuery.OfferType%3Drent%26Location%3Dwarszawa%26objSearchQuery' +
             '.Distance%3D0%26objSearchQuery' +
             '.LatFrom%3D0%26objSearchQuery.LatTo%3D0%26objSearchQuery.LngFrom%3D0%26objSearchQuery.LngTo%3D0%26objSearchQuery.PriceFrom%3D%26objSearchQuery.PriceTo%3D%26objSearchQuery' +
@@ -234,6 +326,56 @@ class ImportIoConsumer {
             '.BuildingYearFrom%3D%26objSearchQuery.BuildingYearTo%3D%26objSearchQuery.FlatFreeFrom%3D%26objSearchQuery.CreationDate%3D%26objSearchQuery.Description%3D%26objSearchQuery' +
             '.offerId%3D%26objSearchQuery.Orderby%3Ddefault%26resultsPerPage%3D100&_user=04e6d081-0839-4cd3-b00b-e35e6fee10da&_apikey=04e6d081-0839-4cd3-b00b-e35e6fee10da' +
             '%3AUGKyc4zkFKdTu87dRv0FxwX7IIcuq7m1pxso5EJAefWwZNyA1xcXGLVn8pJrHoQd0FSOvPoeg3Mm43g3IxBH4Q%3D%3D'
+
+    private
+    static String HOMES_URL_PAGE2 = 'https://api.import.io/store/data/da66e4d6-3d15-4a4f-898c-074740cd8fcb/_query?input/webpage/url=http%3A%2F%2Fotodom.pl%2Findex.php%3Fmod%3' +
+            'Dlisting%26resultsPerPage%3D100%26objSearchQuery.Orderby%3D%26objSearchQuery.ObjectName%3DFlat%26objSearchQuery.OfferType%3Drent%26objSearchQuery.Country.ID%3D1%26objSea' +
+            'rchQuery.Province.ID%3D7%26objSearchQuery.ProvinceName%3DMazowieckie%26objSearchQuery.District.ID%3D197%26objSearchQuery.CityName%3DWarszawa%26Location%3Dmazowieckie%25' +
+            '2C%2520Warszawa%26currentPage%3D2&_user=04e6d081-0839-4cd3-b00b-e35e6fee10da&_apikey=04e6d081-0839-4cd3-b00b-e35e6fee10da%3AUGKyc4zkFKdTu87dRv0FxwX7IIcuq7m1pxso5EJAefWw' +
+            'ZNyA1xc' +
+            'XGLVn8pJrHoQd0FSOvPoeg3Mm43g3IxBH4Q%3D%3D'
+
+    private
+    static String HOMES_ULR_PAGE3 = 'https://api.import.io/store/data/23e5f746-682d-4b4c-a94e-dbe5a823ebcd/_query?input/webpage/url=http%3A%2F%2Fotodom.pl%2Findex.php%3' +
+            'Fmod%3Dlisting%26resultsPerPage%3D100%26objSearchQuery.Orderby%3D%26objSearchQuery.ObjectName%3DFlat%26objSearchQuery.OfferType%3Drent%26objSearchQuery.Country.ID' +
+            '%3D1%26objSearchQuery.Province.ID%3D7%26objSearchQuery.ProvinceName%3DMazowieckie%26objSearchQuery.District.ID%3D197%26objSearchQuery.CityName%3DWarszawa%26Locati' +
+            'on%3Dmazowieckie%252C%2520Warszawa%26currentPage%3D3&_user=04e6d081-0839-4cd3-b00b-e35e6fee10da&_apikey=04e6d081-0839-4cd3-b00b-e' +
+            '35e6fee10da%3AUGKyc4zkFKdTu87dRv0FxwX7IIcuq7m1pxso5EJAefWwZNyA1xcXGLVn8pJrHoQd0FSOvPoeg3Mm43g3IxBH4Q%3D%3D'
+
+    private
+    static String HOMES_URL_PAGE4 = 'https://api.import.io/store/data/e76f8d8f-638e-417f-9053-ef4dbae999e3/_query?input/webpage/url=http%3A%2F%2Fotodom.pl%2Findex.php%3Fm' +
+            'od%3Dlisting%26resultsPerPage%3D100%26objSearchQuery.Orderby%3D%26objSearchQuery.ObjectName%3DFlat%26objSearchQuery.OfferType%3Drent%26objSearchQuery.Country.ID%3D1%2' +
+            '6objSearchQuery.Province.ID%3D7%26objSearchQuery.ProvinceName%3DMazowieckie%26objSearchQuery.District.ID%3D197%26objSearchQuery.CityName%3DWarszawa%26Location%3Dmazow' +
+            'ieckie%252C%2520Warszawa%26currentPage%3D4&_user=04e6d081-0839-4cd3-b00b-e35e6fee10da&_apikey=04e6d081-0839-4cd3-b00b-e35e6fee10da%3AUGKyc4zkFKdTu87dRv0FxwX7IIcuq7m1p' +
+            'xso5EJAefWwZNyA1xcXGLVn8pJrHoQd0FSOvPoeg3Mm43g3IxBH4Q%3D%3D'
+
+    private
+    static String HOMES_URL_PAGE5 = 'https://api.import.io/store/data/9ad7bec3-9713-4085-84ff-e66b4cebb77e/_query?input/webpage/url=http%3A%2F%2Fotodom.pl%2Findex.php%3Fmod%' +
+            '3Dlisting%26resultsPerPage%3D100%26objSearchQuery.Orderby%3D%26objSearchQuery.ObjectName%3DFlat%26objSearchQuery.OfferType%3Drent%26objSearchQuery.Country.ID%3D1%26objS' +
+            'earchQuery.Province.ID%3D7%26objSearchQuery.ProvinceName%3DMazowieckie%26objSearchQuery.District.ID%3D197%26objSearchQuery.CityName%3DWarszawa%26Location%3Dmazowieckie%2' +
+            '52C%2520Warszawa%26currentPage%3D5&_user=04e6d081-0839-4cd3-b00b-e35e6fee10da&_apikey=04e6d081-0839-4cd3-b00b-e35e6fee10da%3AUGKyc4zkFKdTu87dRv0FxwX7IIcuq7m1pxso5EJAefW' +
+            'wZNyA1xcXGLVn8pJrHoQd0FSOvPoeg3Mm43g3IxBH4Q%3D%3D'
+
+    private
+    static String HOMES_URL_PAGE6 = 'https://api.import.io/store/data/25db3923-ada4-43e2-8a35-c5c129337ca2/_query?input/webpage/url=http%3A%2F%2Fotodom.pl%2Findex.php%3Fmod%' +
+            '3Dlisting%26resultsPerPage%3D100%26objSearchQuery.Orderby%3D%26objSearchQuery.ObjectName%3DFlat%26objSearchQuery.OfferType%3Drent%26objSearchQuery.Country.ID%3D1%26obj' +
+            'SearchQuery.Province.ID%3D7%26objSearchQuery.ProvinceName%3DMazowieckie%26objSearchQuery.District.ID%3D197%26objSearchQuery.CityName%3DWarszawa%26Location%3Dmazowieckie' +
+            '%252C%2520Warszawa%26currentPage%3D6&_user=04e6d081-0839-4cd3-b00b-e35e6fee10da&_apikey=04e6d081-0839-4cd3-b00b-e35e6fee10da%3AUGKyc4zkFKdTu87dRv0FxwX7IIcuq7m1pxso5EJA' +
+            'efWwZNyA1xcXGLVn8pJrHoQd0FSOvPoeg3Mm43g3IxBH4Q%3D%3D'
+
+    private
+    static String HOMES_URL_PAGE7 = 'https://api.import.io/store/data/5d3a71da-667d-4527-9087-a7c61c89d267/_query?input/webpage/url=http%3A%2F%2Fotodom.pl%2Findex.php%3Fmod%3' +
+            'Dlisting%26resultsPerPage%3D100%26objSearchQuery.Orderby%3D%26objSearchQuery.ObjectName%3DFlat%26objSearchQuery.OfferType%3Drent%26objSearchQuery.Country.ID%3D1%26objSea' +
+            'rchQuery.Province.ID%3D7%26objSearchQuery.ProvinceName%3DMazowieckie%26objSearchQuery.District.ID%3D197%26objSearchQuery.CityName%3DWarszawa%26Location%3Dmazowieckie%252' +
+            'C%2520Warszawa%26currentPage%3D7&_user=04e6d081-0839-4cd3-b00b-e35e6fee10da&_apikey=04e6d081-0839-4cd3-b00b-e35e6fee10da%3AUGKyc4zkFKdTu87dRv0FxwX7IIcuq7m1pxso5EJAefWwZN' +
+            'yA1xcXGLVn8pJrHoQd0FSOvPoeg3Mm43g3IxBH4Q%3D%3D'
+
+    private
+    static String HOMES_URL_PAGE8 = 'https://api.import.io/store/data/651fd155-12e1-431d-8349-3dd46c1f1e56/_query?input/webpage/url=http%3A%2F%2Fotodom.pl%2Findex.php%3Fmod%3D' +
+            'listing%26resultsPerPage%3D100%26objSearchQuery.Orderby%3D%26objSearchQuery.ObjectName%3DFlat%26objSearchQuery.OfferType%3Drent%26objSearchQuery.Country.ID%3D1%26objSearc' +
+            'hQuery.Province.ID%3D7%26objSearchQuery.ProvinceName%3DMazowieckie%26objSearchQuery.District.ID%3D197%26objSearchQuery.CityName%3DWarszawa%26Location%3Dmazowieckie%252C%' +
+            '2520Warszawa%26currentPage%3D8&_user=04e6d081-0839-4cd3-b00b-e35e6fee10da&_apikey=04e6d081-0839-4cd3-b00b-e35e6fee10da%3AUGKyc4zkFKdTu87dRv0FxwX7IIcuq7m1pxso5EJAefWwZNyA' +
+            '1xcXGLVn8pJrHoQd0FSOvPoeg3Mm43g3IxBH4Q%3D%3D'
 
     private
     static String THEATERS_URL = 'https://api.import.io/store/data/4902ac0e-1fa5-4273-8524-74bf472eecfe/_query?' +
