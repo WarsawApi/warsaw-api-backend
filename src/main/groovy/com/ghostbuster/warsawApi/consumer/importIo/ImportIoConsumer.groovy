@@ -19,14 +19,15 @@ import rx.schedulers.Schedulers
 @Component
 class ImportIoConsumer {
 
-    LocationService locationService
+    private final LocationService locationService
 
     @Autowired
     ImportIoConsumer(LocationService locationService) {
         this.locationService = locationService
     }
 
-    @HystrixCommand(commandKey = 'ImportIO:GeocodeClubs', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "5000")],
+    @HystrixCommand(commandKey = 'ImportIO:GeocodeClubs', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "5000"),
+            @HystrixProperty(name = 'execution.isolation.thread.interruptOnTimeout', value = 'false')],
             fallbackMethod = 'emptyListFallback')
     @Cacheable(value = 'clubs', unless = "#result.isEmpty()")
     List<Localizable> getClubsLocations() {
@@ -48,7 +49,7 @@ class ImportIoConsumer {
     @Cacheable(value = 'properties', unless = "#result.isEmpty()")
     private List<Home> getPropertiesFromOtoDom(String url) {
         List<String> root = new JsonSlurper().parse(url.toURL()).results
-        List<Home> a = root.collect {
+        return root.collect {
             return new Home(address: it.odshowmap_value,
                     price: it.odlisting_value_2_numbers,
                     url: it.odlisting_link_1,
@@ -56,17 +57,13 @@ class ImportIoConsumer {
                     roomsCount: it.odlisting_value_3_numbers,
                     imageUrl: it.odimgborder_image)
         }
-        a.findAll {
-            it.address == null
-        }.each { println 'tutaj 1'; throw new RuntimeException('1') }
-        return a
     }
 
     @CompileDynamic
     @Cacheable(value = 'properties', unless = "#result.isEmpty()")
     private List<Home> getPropertiesFromOtoDom_Sec(String url) {
         List<String> root = new JsonSlurper().parse(url.toURL()).results
-        List<Home> a = root.collect {
+        return root.collect {
             return new Home(address: it.value,
                     price: it.odlisting_value_2_numbers,
                     url: it.odlisting_link_1,
@@ -74,10 +71,6 @@ class ImportIoConsumer {
                     roomsCount: it.odlisting_value_3_numbers,
                     imageUrl: it.odimgborder_image)
         }
-        a.findAll {
-            it.address == null
-        }.each { println 'tutaj 2'; throw new RuntimeException('2') }
-        return a
     }
 
 
@@ -148,7 +141,8 @@ class ImportIoConsumer {
     }
 
 
-    @HystrixCommand(commandKey = 'ImportIO:GeocodeTheaters', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "5000")],
+    @HystrixCommand(commandKey = 'ImportIO:GeocodeTheaters', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "5000"),
+            @HystrixProperty(name = 'execution.isolation.thread.interruptOnTimeout', value = 'false')],
             fallbackMethod = 'emptyListFallback')
     @Cacheable(value = 'theaters', unless = "#result.isEmpty()")
     List<Localizable> getTheatersLocations() {
@@ -163,7 +157,8 @@ class ImportIoConsumer {
         return root.results*.value
     }
 //
-    @HystrixCommand(commandKey = 'ImportIO:GeocodeCinemas', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "5000")],
+    @HystrixCommand(commandKey = 'ImportIO:GeocodeCinemas', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "5000"),
+            @HystrixProperty(name = 'execution.isolation.thread.interruptOnTimeout', value = 'false')],
             fallbackMethod = 'emptyListFallback')
     @Cacheable(value = 'cinemas', unless = "#result.isEmpty()")
     List<Localizable> getCinemasLocations() {
@@ -180,7 +175,8 @@ class ImportIoConsumer {
 //
 
     //
-    @HystrixCommand(commandKey = 'ImportIO:GeocodeExhibitions', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "5000")],
+    @HystrixCommand(commandKey = 'ImportIO:GeocodeExhibitions', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "5000"),
+            @HystrixProperty(name = 'execution.isolation.thread.interruptOnTimeout', value = 'false')],
             fallbackMethod = 'emptyListFallback')
     @Cacheable(value = 'exhibitions', unless = "#result.isEmpty()")
     List<Localizable> getExhibitionsLocations() {
@@ -200,7 +196,8 @@ class ImportIoConsumer {
 //
 
     //
-    @HystrixCommand(commandKey = 'ImportIO:GeocodeParks', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "5000")],
+    @HystrixCommand(commandKey = 'ImportIO:GeocodeParks', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "5000"),
+            @HystrixProperty(name = 'execution.isolation.thread.interruptOnTimeout', value = 'false')],
             fallbackMethod = 'emptyListFallback')
     @Cacheable(value = 'parks', unless = "#result.isEmpty()")
     List<Localizable> getParksLocations() {
@@ -217,7 +214,8 @@ class ImportIoConsumer {
 //
 
     //
-    @HystrixCommand(commandKey = 'ImportIO:GeocodePools', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "5000")],
+    @HystrixCommand(commandKey = 'ImportIO:GeocodePools', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "5000"),
+            @HystrixProperty(name = 'execution.isolation.thread.interruptOnTimeout', value = 'false')],
             fallbackMethod = 'emptyListFallback')
     @Cacheable(value = 'pools', unless = "#result.isEmpty()")
     List<Localizable> getPoolsLocations() {
@@ -234,7 +232,8 @@ class ImportIoConsumer {
 //
 
     //
-    @HystrixCommand(commandKey = 'ImportIO:GeocodeFitness', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "5000")],
+    @HystrixCommand(commandKey = 'ImportIO:GeocodeFitness', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "5000"),
+            @HystrixProperty(name = 'execution.isolation.thread.interruptOnTimeout', value = 'false')],
             fallbackMethod = 'emptyListFallback')
     @Cacheable(value = 'fitness', unless = "#result.isEmpty()")
     List<Localizable> getFitnessLocations() {
@@ -257,7 +256,8 @@ class ImportIoConsumer {
 
 //
 
-    @HystrixCommand(commandKey = 'ImportIO:GeocodeTennis', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "5000")],
+    @HystrixCommand(commandKey = 'ImportIO:GeocodeTennis', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "5000"),
+            @HystrixProperty(name = 'execution.isolation.thread.interruptOnTimeout', value = 'false')],
             fallbackMethod = 'emptyListFallback')
     @Cacheable(value = 'tennis', unless = "#result.isEmpty()")
     List<Localizable> getTenninsLocations() {
@@ -273,7 +273,8 @@ class ImportIoConsumer {
     }
 
     //"
-    @HystrixCommand(commandKey = 'ImportIO:GeocodePubs', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "5000")],
+    @HystrixCommand(commandKey = 'ImportIO:GeocodePubs', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "5000"),
+            @HystrixProperty(name = 'execution.isolation.thread.interruptOnTimeout', value = 'false')],
             fallbackMethod = 'emptyListFallback')
     @Cacheable(value = 'pubs', unless = "#result.isEmpty()")
     List<Localizable> getPubsLocations() {
@@ -289,7 +290,8 @@ class ImportIoConsumer {
     }
 
 //"
-    @HystrixCommand(commandKey = 'ImportIO:GeocodeRestaurant', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "5000")],
+    @HystrixCommand(commandKey = 'ImportIO:GeocodeRestaurant', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "5000"),
+            @HystrixProperty(name = 'execution.isolation.thread.interruptOnTimeout', value = 'false')],
             fallbackMethod = 'emptyListFallback')
     @Cacheable(value = 'restaurants', unless = "#result.isEmpty()")
     List<Localizable> getRestaurantsLocations() {

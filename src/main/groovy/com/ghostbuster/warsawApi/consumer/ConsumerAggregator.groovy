@@ -9,7 +9,9 @@ import com.ghostbuster.warsawApi.scoreCalculator.GenericScoreCalculator
 import com.ghostbuster.warsawApi.service.LocationService
 import groovy.transform.CompileDynamic
 import groovy.transform.CompileStatic
+import org.apache.log4j.Logger
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Component
 
 import java.util.stream.Collectors
@@ -17,6 +19,8 @@ import java.util.stream.Collectors
 @Component
 @CompileStatic
 class ConsumerAggregator {
+
+    private static final Logger log = Logger.getLogger(ConsumerAggregator)
 
     @Autowired
     private WarsawApiConsumer warsawConsumer
@@ -38,6 +42,7 @@ class ConsumerAggregator {
                 .map { it.calculateScore(scoreCalculator, request.preferences) }
                 .collect(Collectors.toList())
 
+        log.error("search sorting and returning")
         return homes.sort { it.score }
                 .take(10)
     }
@@ -51,8 +56,10 @@ class ConsumerAggregator {
     }
 
     @CompileDynamic
+    @Cacheable('zippedProperties')
     List<Home> oneCallToGetThemAll() {
-        return importIoConsumer.homesPage1
+        log.error('start donwloading homes')
+        List<Home> a = importIoConsumer.homesPage1
                 .zipWith(importIoConsumer.homesPage1, { a, b -> a + b })
                 .zipWith(importIoConsumer.homesPage2, { a, b -> a + b })
                 .zipWith(importIoConsumer.homesPage3, { a, b -> a + b })
@@ -65,6 +72,8 @@ class ConsumerAggregator {
                 .toBlocking()
                 .single()
                 .first()
+        log.error('end downloading homes')
+        return a
     }
 
 }

@@ -26,7 +26,8 @@ class HomeRestController {
     }
 
     @RequestMapping('/search')
-    @HystrixCommand(commandKey = 'Search', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "20000")])
+    @HystrixCommand(commandKey = 'Search', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "20000"),
+            @HystrixProperty(name = 'execution.isolation.thread.interruptOnTimeout', value = 'false')])
     public Result search(@RequestBody SearchRequest request) {
         return new Result(apiIntegrator.search(request))
     }

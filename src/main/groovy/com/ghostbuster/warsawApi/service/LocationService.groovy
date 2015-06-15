@@ -32,15 +32,15 @@ class LocationService {
         if (result == null) {
             result = geocodeAddress(address)
             repository.save(result)
+            if (this.counter.incrementAndGet() % 5) {
+                Thread.sleep(1001)
+            }
         }
 
-        if (this.counter.incrementAndGet() % 5) {
-            Thread.sleep(1001)
-        }
         return result
     }
 
-    //throwing error for some reason
+    //throwing error for some reason probably because of
 //    @Cacheable('locations')
 //    List<Location> findByAddresses(List<String> addresses) {
 //        List<Location> locations = repository.findByAddressIn(addresses)
