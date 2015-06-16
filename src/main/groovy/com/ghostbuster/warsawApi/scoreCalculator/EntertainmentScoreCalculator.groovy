@@ -47,21 +47,21 @@ class EntertainmentScoreCalculator implements ScoreCalculator<Entertainment> {
         return score
     }
 
-    @Cacheable('minDistanceToRestaurant')
+    @Cacheable(value = 'minDistanceToRestaurant', unless = "#result < 1")
     private Double calculateScoreForRestaurants(Home property) {
         List<Localizable> locations = restaurantProvider.restaurantsLocations
 
         return property.calculateMinDistance(locations)
     }
 
-    @Cacheable('minDistanceToPub')
+    @Cacheable(value = 'minDistanceToPub', unless = "#result < 1")
     private Double calculateScoreForPubs(Home property) {
         List<Localizable> locations = pubProvider.pubsLocations
 
         return property.calculateMinDistance(locations)
     }
 
-    @Cacheable('minDistanceToClub')
+    @Cacheable(value = 'minDistanceToClub', unless = "#result < 1")
     private Double calculateScoreForClubs(Home property) {
         List<Localizable> locations = clubProvider.clubsLocations
 

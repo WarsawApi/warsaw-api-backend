@@ -5,7 +5,7 @@ import com.ghostbuster.warsawApi.domain.internal.Localizable
 import com.ghostbuster.warsawApi.domain.internal.Location
 import com.ghostbuster.warsawApi.domain.internal.preference.Recreation
 import com.ghostbuster.warsawApi.provider.importIo.ParkProvider
-import com.ghostbuster.warsawApi.provider.warsaw.WarsawApiConsumer
+import com.ghostbuster.warsawApi.provider.warsaw.WarsawApiProvider
 import groovy.transform.CompileStatic
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.annotation.Cacheable
@@ -15,11 +15,11 @@ import org.springframework.stereotype.Component
 @Component
 class RecreationScoreCalculator implements ScoreCalculator<Recreation> {
 
-    private final WarsawApiConsumer warsawApi
+    private final WarsawApiProvider warsawApi
     private final ParkProvider parkProvider
 
     @Autowired
-    RecreationScoreCalculator(WarsawApiConsumer warsawApi, ParkProvider parkProvider) {
+    RecreationScoreCalculator(WarsawApiProvider warsawApi, ParkProvider parkProvider) {
         this.warsawApi = warsawApi
         this.parkProvider = parkProvider
     }
@@ -45,7 +45,7 @@ class RecreationScoreCalculator implements ScoreCalculator<Recreation> {
         return score
     }
 
-    @Cacheable('minDistanceToPark')
+    @Cacheable(value = 'minDistanceToPark', unless = "#result < 1")
     private Double calculateScoreForParks(Home property) {
         List<Localizable> parksLocations = parkProvider.parksLocations
 
@@ -56,7 +56,7 @@ class RecreationScoreCalculator implements ScoreCalculator<Recreation> {
         return 0d
     }
 
-    @Cacheable('minDistanceToBike')
+    @Cacheable(value = 'minDistanceToBike', unless = "#result < 1")
     private Double calculateScoreForBikes(Home property) {
         List<Location> bikeStations = warsawApi.bikesStations
 

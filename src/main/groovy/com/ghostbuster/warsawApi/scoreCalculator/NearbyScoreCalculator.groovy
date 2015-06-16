@@ -1,6 +1,7 @@
 package com.ghostbuster.warsawApi.scoreCalculator
 
 import com.ghostbuster.warsawApi.domain.internal.Home
+import com.ghostbuster.warsawApi.domain.internal.Localizable
 import com.ghostbuster.warsawApi.domain.internal.Location
 import com.ghostbuster.warsawApi.domain.internal.preference.Nearby
 import com.ghostbuster.warsawApi.service.LocationService
@@ -42,14 +43,14 @@ class NearbyScoreCalculator implements ScoreCalculator<Nearby> {
         return score
     }
 
-    @Cacheable('minDistanceToNearby')
+    @Cacheable(value = 'minDistanceToNearby', unless = "#result < 1")
     private Double calculateScoreForLocation(Home property, Location location) {
         return property.distanceTo(location)
     }
 
-    @Cacheable('minDistanceToPhrase')
+    @Cacheable(value = 'minDistanceToPhrase', unless = "#result < 1")
     private Double calculateScoreForPhrase(Home property, String address) {
-        Location location = locationService.findByAddress(address)
+        Localizable location = locationService.findByAddress(address)
 
         return property.distanceTo(location)
     }

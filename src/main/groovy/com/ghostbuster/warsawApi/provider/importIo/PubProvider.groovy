@@ -38,6 +38,11 @@ class PubProvider {
         return root.results*.searchresult_value
     }
 
+    @SuppressWarnings('unused')
+    private List<Object> emptyListFallback() {
+        return []
+    }
+
     private static String PUBS_URL = 'https://api.import.io/store/data/fe431774-7e71-41f8-8579-f0691df11161/_query?' +
             'input/webpage/url=https%3A%2F%2Fwww.zomato.com%2Fpl%2Fwarszawa' +
             '%2Fpub&_user=a837cd70-64c7-47ef-9a54-775245e5543e&_apikey=a837cd70-64c7-47ef-9a54-' +

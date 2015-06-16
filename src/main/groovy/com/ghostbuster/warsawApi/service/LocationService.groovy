@@ -1,13 +1,15 @@
 package com.ghostbuster.warsawApi.service
 
+import com.ghostbuster.warsawApi.domain.internal.EmptyLocation
+import com.ghostbuster.warsawApi.domain.internal.Localizable
 import com.ghostbuster.warsawApi.domain.internal.Location
-import com.ghostbuster.warsawApi.provider.google.GeocodeServiceConsumer
+import com.ghostbuster.warsawApi.provider.google.GeocodeServiceProvider
 import com.ghostbuster.warsawApi.repository.LocationRepository
 import groovy.transform.CompileStatic
-import org.apache.log4j.Logger
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -15,57 +17,57 @@ import java.util.concurrent.atomic.AtomicInteger
 @Service
 class LocationService {
 
-    private final static Logger log = Logger.getLogger(LocationService)
-
     private final AtomicInteger counter = new AtomicInteger(0)
-//    private final Lock lock = new ReentrantLock()
 
     private final LocationRepository repository
-    private final GeocodeServiceConsumer geocoder
+    private final GeocodeServiceProvider geocoder
 
     @Autowired
-    LocationService(LocationRepository repository, GeocodeServiceConsumer geocoder) {
+    LocationService(LocationRepository repository, GeocodeServiceProvider geocoder) {
         this.repository = repository
         this.geocoder = geocoder
     }
 
     @Cacheable('locations')
-    Location findByAddress(String address) {
-        Location result = repository.findByAddress(address)
+    @Transactional
+    Localizable findByAddress(String address) {
+        Localizable result = mapToEmptyIfNeeded(repository.findByAddress(address))
 
         if (result == null) {
-//            lock.lock()
-//            try {
-//                result = repository.findByAddress(address)
-//                if (result == null) {
             result = geocodeAddress(address)
-            repository.save(result)
-            if (this.counter.incrementAndGet() % 5) {
-                Thread.sleep(1001)
-            }
-//                }
-//            } finally {
-//                lock.unlock()
-//            }
+            repository.save((Location) result)
+            waitEvery5requests()
         }
 
         return result
     }
 
-    //throwing error for some reason probably because of
+    private Localizable mapToEmptyIfNeeded(Location location) {
+        if (!location.address) {
+            return new EmptyLocation()
+        }
+        return location
+    }
+
+    private void waitEvery5requests() {
+        if (this.counter.incrementAndGet() % 5) {
+            Thread.sleep(1001)
+        }
+    }
+
     @Cacheable('locations')
+    @Transactional
     List<Location> findByAddresses(List<String> addresses) {
-        List<Location> locations = repository.findByAddressIn(addresses)
-
+        List<Localizable> locations = repository.findByAddressIn(addresses).collect { mapToEmptyIfNeeded(it) }
         List<String> notFound = addresses - locations*.address
-
-        List<Location> newlySaved = repository.save(notFound.collect {
+        List<Location> geocoded = notFound.collect {
             if (this.counter.incrementAndGet() % 5) {
                 Thread.sleep(1001)
             }
             return geocodeAddress(it)
-        })
+        }
 
+        List<Localizable> newlySaved = repository.save(geocoded) as List<Localizable>
         return newlySaved + locations
     }
 

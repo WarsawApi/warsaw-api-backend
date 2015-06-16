@@ -47,21 +47,21 @@ class CultureScoreCalculator implements ScoreCalculator<Culture> {
         return score
     }
 
-    @Cacheable('minDistanceToTheater')
+    @Cacheable(value = 'minDistanceToTheater', unless = "#result < 1")
     private Double calculateScoreForTheaters(Home home) {
         List<Localizable> locations = theaterProvider.theatersLocations
 
         return home.calculateMinDistance(locations)
     }
 
-    @Cacheable('minDistanceToExhibition')
+    @Cacheable(value = 'minDistanceToExhibition', unless = "#result < 1")
     private Double calculateScoreForExhibitions(Home home) {
         List<Localizable> locations = exhibitionProvider.exhibitionsLocations
 
         return home.calculateMinDistance(locations)
     }
 
-    @Cacheable('minDistanceToCinema')
+    @Cacheable(value = 'minDistanceToCinema', unless = "#result < 1")
     private Double calculateScoreForCinemas(Home home) {
         List<Localizable> locations = cinemaProvider.cinemasLocations
 

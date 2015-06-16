@@ -13,7 +13,7 @@ import org.springframework.web.client.RestTemplate
 
 @CompileStatic
 @Component
-class WarsawApiConsumer {
+class WarsawApiProvider {
 
     @HystrixCommand(commandKey = 'Warsaw:subways', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = '5000')],
             fallbackMethod = 'emptyListFallback')

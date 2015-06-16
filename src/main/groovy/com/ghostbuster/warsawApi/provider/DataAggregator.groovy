@@ -4,7 +4,7 @@ import com.ghostbuster.warsawApi.domain.internal.Filters
 import com.ghostbuster.warsawApi.domain.internal.Home
 import com.ghostbuster.warsawApi.domain.internal.SearchRequest
 import com.ghostbuster.warsawApi.provider.importIo.HomeProvider
-import com.ghostbuster.warsawApi.provider.warsaw.WarsawApiConsumer
+import com.ghostbuster.warsawApi.provider.warsaw.WarsawApiProvider
 import com.ghostbuster.warsawApi.scoreCalculator.GenericScoreCalculator
 import com.ghostbuster.warsawApi.service.LocationService
 import groovy.transform.CompileStatic
@@ -22,7 +22,7 @@ class DataAggregator {
     private static final Logger log = Logger.getLogger(DataAggregator)
 
     @Autowired
-    private WarsawApiConsumer warsawConsumer
+    private WarsawApiProvider warsawConsumer
 
     @Autowired
     private HomeProvider importIoConsumer

@@ -21,7 +21,7 @@ final class Home implements Localizable {
     String roomsCount
 
     @Delegate
-    Location location = new Location()
+    Localizable location = new Location()
 
     final private WarsawApiInfo apiInfo = new WarsawApiInfo()
 
@@ -29,7 +29,6 @@ final class Home implements Localizable {
 
     public Home(WarsawData entity) {
         objectId = entity.getKeyValue('ID')
-        location.address = '?'
         url = entity.getKeyValue('OGLOSZENIE')
         location = new Location(entity.getFirstCoordinate())
     }
