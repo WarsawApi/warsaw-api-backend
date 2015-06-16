@@ -2,6 +2,8 @@ package com.ghostbuster.warsawApi.provider.importIo
 
 import com.ghostbuster.warsawApi.domain.internal.Localizable
 import com.ghostbuster.warsawApi.service.LocationService
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty
 import groovy.json.JsonSlurper
 import groovy.transform.CompileDynamic
 import groovy.transform.CompileStatic
@@ -20,17 +22,17 @@ class RestaurantProvider {
         this.locationService = locationService
     }
 
-//    @HystrixCommand(commandKey = 'ImportIO:GeocodeRestaurant', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "5000"),
-//            @HystrixProperty(name = 'execution.isolation.thread.interruptOnTimeout', value = 'false')],
-//            fallbackMethod = 'emptyListFallback')
+    @HystrixCommand(commandKey = 'ImportIO:GeocodeRestaurant', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "5000"),
+            @HystrixProperty(name = 'execution.isolation.thread.interruptOnTimeout', value = 'false')],
+            fallbackMethod = 'emptyListFallback')
     @Cacheable(value = 'restaurants', unless = "#result.isEmpty()")
     List<Localizable> getRestaurantsLocations() {
         return locationService.findByAddresses(restaurants)
 
     }
-//
-//    @HystrixCommand(commandKey = 'ImportIO:restaurants', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "5000")],
-//            fallbackMethod = 'emptyListFallback')
+
+    @HystrixCommand(commandKey = 'ImportIO:restaurants', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "5000")],
+            fallbackMethod = 'emptyListFallback')
     @CompileDynamic
     private List<String> getRestaurants() {
         def root = new JsonSlurper().parse(RESTAURANTS_URL.toURL())
