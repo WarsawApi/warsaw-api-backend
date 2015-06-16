@@ -1,4 +1,4 @@
-package com.ghostbuster.warsawApi.consumer.google
+package com.ghostbuster.warsawApi.provider.google
 
 import com.ghostbuster.warsawApi.domain.internal.Location
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand
@@ -14,10 +14,9 @@ class GeocodeServiceConsumer {
         String city = 'Warszawa'
         String country = 'Polska'
         try {
-            return tryGeocode(address, city, country, 'AIzaSyD_w8SpDiqW-h2OUFhUWOjw0jB0v8e5wiQ')
-        } catch (RuntimeException ignored) {
-            Thread.sleep(1001)
             return tryGeocode(address, city, country, 'AIzaSyBCOI68ONAcSknrt93Lv5QVmV9aWeyMcgo')
+        } catch (RuntimeException ignored) {
+            return tryGeocode(address, city, country, 'AIzaSyDx2PINJ-2faey_eKdNnG7v2ffQ2pigwhw')
         }
     }
 

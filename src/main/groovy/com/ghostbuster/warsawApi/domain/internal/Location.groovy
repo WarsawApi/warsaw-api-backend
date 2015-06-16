@@ -5,7 +5,6 @@ import groovy.transform.CompileStatic
 import groovy.transform.TupleConstructor
 
 import javax.persistence.Entity
-import javax.persistence.GeneratedValue
 import javax.persistence.Id
 
 @CompileStatic
@@ -14,13 +13,10 @@ import javax.persistence.Id
 final class Location implements Localizable {
 
     @Id
-    @GeneratedValue
-    long id
+    String address
 
     String latitude
     String longitude
-
-    String address
 
     Location(){}
 

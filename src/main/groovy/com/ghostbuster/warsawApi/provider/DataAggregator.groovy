@@ -1,13 +1,12 @@
-package com.ghostbuster.warsawApi.consumer
+package com.ghostbuster.warsawApi.provider
 
-import com.ghostbuster.warsawApi.consumer.importIo.ImportIoConsumer
-import com.ghostbuster.warsawApi.consumer.warsaw.WarsawApiConsumer
 import com.ghostbuster.warsawApi.domain.internal.Filters
 import com.ghostbuster.warsawApi.domain.internal.Home
 import com.ghostbuster.warsawApi.domain.internal.SearchRequest
+import com.ghostbuster.warsawApi.provider.importIo.HomeProvider
+import com.ghostbuster.warsawApi.provider.warsaw.WarsawApiConsumer
 import com.ghostbuster.warsawApi.scoreCalculator.GenericScoreCalculator
 import com.ghostbuster.warsawApi.service.LocationService
-import groovy.transform.CompileDynamic
 import groovy.transform.CompileStatic
 import org.apache.log4j.Logger
 import org.springframework.beans.factory.annotation.Autowired
@@ -18,15 +17,15 @@ import java.util.stream.Collectors
 
 @Component
 @CompileStatic
-class ConsumerAggregator {
+class DataAggregator {
 
-    private static final Logger log = Logger.getLogger(ConsumerAggregator)
+    private static final Logger log = Logger.getLogger(DataAggregator)
 
     @Autowired
     private WarsawApiConsumer warsawConsumer
 
     @Autowired
-    private ImportIoConsumer importIoConsumer
+    private HomeProvider importIoConsumer
 
     @Autowired
     private LocationService locationService
@@ -51,23 +50,18 @@ class ConsumerAggregator {
         return filter ? filter.applyFilter(property) : true
     }
 
-    public Home getById(String id) {
-        return warsawConsumer.getById(id)
-    }
-
-    @CompileDynamic
     @Cacheable('zippedProperties')
     List<Home> oneCallToGetThemAll() {
-        log.error('start donwloading homes')
+        log.error('start downloading homes')
         List<Home> a = importIoConsumer.homesPage1
-                .zipWith(importIoConsumer.homesPage1, { a, b -> a + b })
-                .zipWith(importIoConsumer.homesPage2, { a, b -> a + b })
-                .zipWith(importIoConsumer.homesPage3, { a, b -> a + b })
-                .zipWith(importIoConsumer.homesPage4, { a, b -> a + b })
-                .zipWith(importIoConsumer.homesPage5, { a, b -> a + b })
-                .zipWith(importIoConsumer.homesPage6, { a, b -> a + b })
-                .zipWith(importIoConsumer.homesPage7, { a, b -> a + b })
-                .zipWith(importIoConsumer.homesPage8, { a, b -> a + b })
+                .zipWith(importIoConsumer.homesPage2, { List<Home> a, List<Home> b -> a + b })
+//                .zipWith(homeProvider.homesPage3, { a, b -> a + b })
+//                .zipWith(homeProvider.homesPage4, { a, b -> a + b })
+//                .zipWith(homeProvider.homesPage5, { a, b -> a + b })
+//                .zipWith(homeProvider.homesPage6, { a, b -> a + b })
+//                .zipWith(homeProvider.homesPage7, { a, b -> a + b })
+//                .zipWith(homeProvider.homesPage8, { a, b -> a + b })
+//                .zipWith(homeProvider.homesPage9, { a, b -> a + b })
                 .toList()
                 .toBlocking()
                 .single()

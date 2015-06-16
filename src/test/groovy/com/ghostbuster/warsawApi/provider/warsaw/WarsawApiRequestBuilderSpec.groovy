@@ -1,4 +1,4 @@
-package com.ghostbuster.warsawApi.consumer.warsaw
+package com.ghostbuster.warsawApi.provider.warsaw
 
 import spock.lang.Specification
 

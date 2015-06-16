@@ -1,9 +1,9 @@
 package com.ghostbuster.warsawApi.scoreCalculator
 
-import com.ghostbuster.warsawApi.consumer.warsaw.WarsawApiConsumer
 import com.ghostbuster.warsawApi.domain.internal.Home
 import com.ghostbuster.warsawApi.domain.internal.SubwayStation
 import com.ghostbuster.warsawApi.domain.internal.preference.Transportation
+import com.ghostbuster.warsawApi.provider.warsaw.WarsawApiConsumer
 import groovy.transform.CompileStatic
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.annotation.Cacheable
