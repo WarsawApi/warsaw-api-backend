@@ -23,7 +23,8 @@ class RestaurantProvider {
     }
 
     @HystrixCommand(commandKey = 'ImportIO:GeocodeRestaurant', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "5000"),
-            @HystrixProperty(name = 'execution.isolation.thread.interruptOnTimeout', value = 'false')],
+            @HystrixProperty(name = 'execution.isolation.thread.interruptOnTimeout', value = 'false'),
+            @HystrixProperty(name = 'default.circuitBreaker.enabled', value = 'false')],
             fallbackMethod = 'emptyListFallback')
     @Cacheable(value = 'restaurants', unless = "#result.isEmpty()")
     List<Localizable> getRestaurantsLocations() {

@@ -18,6 +18,8 @@ final class Location implements Localizable {
     String latitude
     String longitude
 
+    boolean empty = false
+
     Location(){}
 
     Location(Coordinate coordinate){

@@ -23,7 +23,8 @@ class PoolProvider {
     }
 
     @HystrixCommand(commandKey = 'ImportIO:GeocodePools', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "5000"),
-            @HystrixProperty(name = 'execution.isolation.thread.interruptOnTimeout', value = 'false')],
+            @HystrixProperty(name = 'execution.isolation.thread.interruptOnTimeout', value = 'false'),
+            @HystrixProperty(name = 'default.circuitBreaker.enabled', value = 'false')],
             fallbackMethod = 'emptyListFallback')
     @Cacheable(value = 'pools', unless = "#result.isEmpty()")
     List<Localizable> getPoolsLocations() {

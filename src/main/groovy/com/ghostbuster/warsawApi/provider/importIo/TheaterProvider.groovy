@@ -23,7 +23,8 @@ class TheaterProvider {
     }
 
     @HystrixCommand(commandKey = 'ImportIO:GeocodeTheaters', commandProperties = [@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "5000"),
-            @HystrixProperty(name = 'execution.isolation.thread.interruptOnTimeout', value = 'false')],
+            @HystrixProperty(name = 'execution.isolation.thread.interruptOnTimeout', value = 'false'),
+            @HystrixProperty(name = 'default.circuitBreaker.enabled', value = 'false')],
             fallbackMethod = 'emptyListFallback')
     @Cacheable(value = 'theaters', unless = "#result.isEmpty()")
     List<Localizable> getTheatersLocations() {

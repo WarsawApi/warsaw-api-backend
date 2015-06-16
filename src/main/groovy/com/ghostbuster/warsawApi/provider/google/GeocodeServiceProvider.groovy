@@ -7,6 +7,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty
 import groovy.json.JsonSlurper
 import groovy.transform.CompileDynamic
 import groovy.transform.CompileStatic
+import groovy.transform.InheritConstructors
 import org.apache.log4j.Logger
 import org.springframework.stereotype.Component
 
@@ -31,7 +32,7 @@ class GeocodeServiceProvider {
             }
         }
         log.error("error while geocoding address : ${address}")
-        return new EmptyLocation().toLocation()
+        return new EmptyLocation(address).toLocation()
     }
 
     @CompileDynamic
@@ -46,6 +47,7 @@ class GeocodeServiceProvider {
         throw new GeocodeException('geocoding failed!')
     }
 
+    @InheritConstructors
     static class GeocodeException extends RuntimeException {
 
     }

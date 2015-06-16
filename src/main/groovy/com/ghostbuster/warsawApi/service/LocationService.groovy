@@ -31,10 +31,11 @@ class LocationService {
     @Cacheable('locations')
     @Transactional
     Localizable findByAddress(String address) {
-        Localizable result = mapToEmptyIfNeeded(repository.findByAddress(address))
+        String trimmedAddress = cutStringAfter50(address)
+        Localizable result = mapToEmptyIfNeeded(repository.findByAddress(trimmedAddress))
 
         if (result == null) {
-            result = geocodeAddress(address)
+            result = geocodeAddress(trimmedAddress)
             repository.save((Location) result)
             waitEvery5requests()
         }
@@ -42,24 +43,13 @@ class LocationService {
         return result
     }
 
-    private Localizable mapToEmptyIfNeeded(Location location) {
-        if (!location.address) {
-            return new EmptyLocation()
-        }
-        return location
-    }
-
-    private void waitEvery5requests() {
-        if (this.counter.incrementAndGet() % 5) {
-            Thread.sleep(1001)
-        }
-    }
-
     @Cacheable('locations')
     @Transactional
     List<Location> findByAddresses(List<String> addresses) {
-        List<Localizable> locations = repository.findByAddressIn(addresses).collect { mapToEmptyIfNeeded(it) }
-        List<String> notFound = addresses - locations*.address
+        List<String> trimmedAddress = addresses.collect { cutStringAfter50(it) }
+
+        List<Localizable> locations = repository.findByAddressIn(trimmedAddress).collect { mapToEmptyIfNeeded(it) }
+        List<String> notFound = trimmedAddress - locations*.address
         List<Location> geocoded = notFound.collect {
             if (this.counter.incrementAndGet() % 5) {
                 Thread.sleep(1001)
@@ -73,6 +63,23 @@ class LocationService {
 
     private Location geocodeAddress(String address) {
         return geocoder.geocode(address)
+    }
+
+    private String cutStringAfter50(String address) {
+        address.length() > 50 ? address.substring(0, 50) : address
+    }
+
+    private Localizable mapToEmptyIfNeeded(Location location) {
+        if (location != null && location.isEmpty()) {
+            return new EmptyLocation(location.address)
+        }
+        return location
+    }
+
+    private void waitEvery5requests() {
+        if (this.counter.incrementAndGet() % 5) {
+            Thread.sleep(1001)
+        }
     }
 
 
